@@ -15,7 +15,7 @@ class myLexer(object):
         'void': 'void',
         'main': 'main',
         'String' : 'String',
-        'System.out.println': 'PRINTLN',
+        'System.out.println': 'PRINT',
         'if': 'if',
         'else': 'else',
         'length': 'length',
@@ -84,6 +84,7 @@ class myLexer(object):
         r'\d+'
         t.value = int(t.value)
         return t
+    
     #IDENTIFICA NOVAS LINHAS
     def t_novalinha(self, t):
         r'\n+'
@@ -138,3 +139,5 @@ m.test(
     }
     '''
 )
+
+

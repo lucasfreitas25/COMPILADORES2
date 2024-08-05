@@ -1,0 +1,128 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ASSIGMENT
+    COLON
+    DIF
+    DIVI
+    IGUAL
+    LCBRA
+    LPAR
+    LSBRA
+    MEN
+    MENOS
+    MUL
+    NEG
+    NUMBER
+    POINT
+    RCBRA
+    RPAR
+    RSBRA
+    SEMICOLON
+    SUM
+
+Grammar
+
+Rule 0     S' -> Program
+Rule 1     Program -> MainClass ClassDeclarationList
+Rule 2     ClassDeclarationList -> ClassDeclaration ClassDeclarationList
+Rule 3     ClassDeclarationList -> empty
+Rule 4     MainClass -> CLASS ID LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN LBRACE Statement RBRACE RBRACE
+Rule 5     ClassDeclaration -> CLASS ID LBRACE VarDeclarationList MethodDeclarationList RBRACE
+Rule 6     ClassDeclaration -> CLASS ID EXTENDS ID LBRACE VarDeclarationList MethodDeclarationList RBRACE
+Rule 7     VarDeclarationList -> VarDeclaration VarDeclarationList
+Rule 8     VarDeclarationList -> empty
+Rule 9     VarDeclaration -> Type ID SEMI
+Rule 10    MethodDeclarationList -> MethodDeclaration MethodDeclarationList
+Rule 11    MethodDeclarationList -> empty
+Rule 12    MethodDeclaration -> PUBLIC Type ID LPAREN ParameterList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI RBRACE
+Rule 13    Type -> INT LBRACKET RBRACKET
+Rule 14    Type -> BOOLEAN
+Rule 15    Type -> INT
+Rule 16    Type -> ID
+Rule 17    expression -> expression MAIOR expression
+Rule 18    expression -> expression MENOR expression
+Rule 19    expression -> expression EQUALS expression
+Rule 20    expression -> expression DIFF expression
+Rule 21    expression -> expression AND expression
+Rule 22    ParameterList -> Type ID ParameterListRest
+Rule 23    ParameterList -> empty
+Rule 24    ParameterListRest -> VIRGU Type ID ParameterListRest
+Rule 25    ParameterListRest -> empty
+Rule 26    ExpressionList -> Expression ExpressionListRest
+Rule 27    ExpressionList -> empty
+Rule 28    ExpressionListRest -> VIRGU Expression ExpressionListRest
+Rule 29    ExpressionListRest -> empty
+Rule 30    optitem -> item
+
+Terminals, with rules where they appear
+
+AND                  : 21
+ASSIGMENT            : 
+COLON                : 
+DIF                  : 
+DIVI                 : 
+ID                   : 4 4 5 6 6 9 12 16 22 24
+IGUAL                : 
+LCBRA                : 
+LPAR                 : 
+LSBRA                : 
+MEN                  : 
+MENOS                : 
+MUL                  : 
+NEG                  : 
+NUMBER               : 
+POINT                : 
+RCBRA                : 
+RPAR                 : 
+RSBRA                : 
+SEMICOLON            : 
+SUM                  : 
+VIRGU                : 24 28
+error                : 
+
+Nonterminals, with rules where they appear
+
+BOOLEAN              : 14
+CLASS                : 4 5 6
+ClassDeclaration     : 2
+ClassDeclarationList : 1 2
+DIFF                 : 20
+EQUALS               : 19
+EXTENDS              : 6
+Expression           : 12 26 28
+ExpressionList       : 
+ExpressionListRest   : 26 28
+INT                  : 13 15
+LBRACE               : 4 4 5 6 12
+LBRACKET             : 4 13
+LPAREN               : 4 12
+MAIN                 : 4
+MAIOR                : 17
+MENOR                : 18
+MainClass            : 1
+MethodDeclaration    : 10
+MethodDeclarationList : 5 6 10
+PUBLIC               : 4 12
+ParameterList        : 12
+ParameterListRest    : 22 24
+Program              : 0
+RBRACE               : 4 4 5 6 12
+RBRACKET             : 4 13
+RETURN               : 12
+RPAREN               : 4 12
+SEMI                 : 9 12
+STATIC               : 4
+STRING               : 4
+Statement            : 4
+StatementList        : 12
+Type                 : 9 12 22 24
+VOID                 : 4
+VarDeclaration       : 7
+VarDeclarationList   : 5 6 7 12
+empty                : 3 8 11 23 25 27 29
+expression           : 17 17 18 18 19 19 20 20 21 21
+item                 : 30
+optitem              : 
+
