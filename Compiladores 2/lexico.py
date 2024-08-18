@@ -24,6 +24,7 @@ class myLexer(object):
         'this': 'this',
         'new': 'new',
         'null': 'null',
+        'double': 'double'
 
     }
 
@@ -46,6 +47,9 @@ class myLexer(object):
         'IGUAL', # ==
         'AND', # &&
         'MEN', # <
+        'MAI_IGUAL', # >=
+        'MEN_IGUAL', # <=
+        'MAI', # >
         'NEG', # !
         'SEMICOLON', # ;
         'LSBRA', # [
@@ -68,6 +72,9 @@ class myLexer(object):
     t_IGUAL = r'\=\='
     t_AND = r'\&\&'
     t_MEN = r'\<'
+    t_MAI_IGUAL = r'>='
+    t_MEN_IGUAL = r'<='
+    t_MAI = r'>'
     t_NEG = r'\!'
     t_SEMICOLON = r'\;'
     t_LSBRA = r'\['
@@ -81,8 +88,8 @@ class myLexer(object):
 
     #IDENTIFICA OS NUMEROS
     def t_NUMBER(self, t):
-        r'\d+'
-        t.value = int(t.value)
+        r'\d+(\.\d+)?'
+        t.value = float(t.value)
         return t
     
     #IDENTIFICA NOVAS LINHAS
@@ -121,20 +128,26 @@ m = myLexer()
 m.build()
 m.test(
     '''
-    class Factorial {
-        public static void main ( String [] a ){
-            System.out.println (new Fac (). ComputeFac (10));
+    public class Teste {
+        public static void main(String[] args) {
+            somar();
         }
-    }
-    #Teste
-    class Fac {
-        public int ComputeFac (int num ){
-            int num_aux ;
-            if ( num < 1) 
-                num_aux = 1;
-            else
-                num_aux = num * ( this . ComputeFac ( num -1));
-        return num_aux ;
+        public static double somar(){
+            double cont;
+            double a,b,c;
+            cont = 10;
+            while(cont > 0) {
+                a = lerDouble();
+                b = lerDouble();
+                if (a > b) {
+                    c = a - b;
+                } else {
+                    c = b - a;
+                }
+                System.out.println(c);
+                cont = cont - 1;
+            }
+            return c;
         }
     }
     '''

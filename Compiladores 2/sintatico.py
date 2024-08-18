@@ -2,6 +2,7 @@ import ply.yacc as yacc
 import keyboard as key
 import re
 from lexico import myLexer, tokens
+
 tokens = [
     'ID',
     'COLON', # :
@@ -21,14 +22,18 @@ tokens = [
     'IGUAL', # ==
     'AND', # &&
     'MEN', # <
+    'MAI_IGUAL', # >=
+    'MEN_IGUAL', # <=
+    'MAI', # >
     'NEG', # !
     'SEMICOLON', # ;
     'LSBRA', # [
     'RSBRA' # ] 
-] 
+    ] 
+
 procedencia = (
-    ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE'),
+    ('left', 'SUM', 'MENOS'),
+    ('left', 'MUL', 'DIVI'),
 )
 
 def p_program(p):
@@ -40,22 +45,15 @@ def p_class_declaration_list(p):
                             | empty'''
     pass
 
-def p_main_class_palavras_chaves(p):
-    'MainClass : CLASS ID LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN LBRACE Statement RBRACE RBRACE'
+#Definição da MAIN
+def p_prog(p):
+    'PROG : PUBLIC CLASS ID LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN LBRACE CMDS RBRACE METODO RBRACE'
     pass
 
+#Definição quando ha extends
 def p_class_declaration(p):
     '''ClassDeclaration : CLASS ID LBRACE VarDeclarationList MethodDeclarationList RBRACE
                         | CLASS ID EXTENDS ID LBRACE VarDeclarationList MethodDeclarationList RBRACE'''
-    pass
-
-def p_var_declaration_list(p):
-    '''VarDeclarationList : VarDeclaration VarDeclarationList
-                          | empty'''
-    pass
-
-def p_var_declaration(p):
-    'VarDeclaration : Type ID SEMI'
     pass
 
 def p_method_declaration_list(p):
@@ -63,16 +61,78 @@ def p_method_declaration_list(p):
                              | empty'''
     pass
 
-def p_method_declaration(p):
-    'MethodDeclaration : PUBLIC Type ID LPAREN ParameterList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI RBRACE'
+#Definição do metodos
+def p_metodo(p):
+    '''METODO : PUBLIC STATIC TIPO ID LPAREN PARAMS RPAREN LBRACE DC CMDS RETURN EXPRESSAO SEMI RBRACE
+              | empty'''
     pass
 
-def p_type(p):
-    '''Type : INT LBRACKET RBRACKET
+#Defini as regras dos parametros do metodos
+def p_params(p):
+    '''PARAMS : TIPO ID MAIS_PARAMS
+              | empty'''
+    pass
+
+#Virgula apos o outro parametro
+def p_mais_params(p):
+    '''MAIS_PARAMS : VIRGU PARAMS
+                   | empty'''
+    pass
+
+#Mais de uma declaração
+def p_dc(p):
+    '''DC : VAR MAIS_DC
+          | empty'''
+    pass
+
+#ponto e virgula entre parametros
+def p_mais_dc(p):
+    '''MAIS_DC : SEMI DC
+               | empty'''
+    pass
+
+#Defini as regras de declaração de variavel
+def p_var_declaration_list(p):
+    '''VarDeclarationList : VarDeclaration VarDeclarationList
+                          | empty'''
+    pass
+    
+def p_var(p):
+    'VAR : TIPO VARS SEMI'
+    pass
+
+def p_vars(p):
+    'VARS :  ID MAIS_VAR '
+    pass
+
+#VIRGULA APOS MAIS VARIAVEIS
+def p_mais_var(p):
+    '''MAIS_VAR : VIRGU VARS
+                | empty'''
+    pass
+#TIPOS ACEITOS
+def p_tipo(p):
+    '''TIPO : INT LBRACKET RBRACKET
             | BOOLEAN
             | INT
-            | ID'''
+            | ID
+            | DOUBLE
+            '''
     pass
+
+def p_cmds(p):
+    '''CMDS : CMD MAIS_CMDS
+            | empty'''
+    pass
+
+def p_mais_cmds(p):
+    '''MAIS_CMDS : SEMI CMDS
+                 | empty'''
+    pass
+def p_statement_condicionais(p):
+    '''
+    statement : 
+    '''
 
 def operacoes(p):
     '''expressão: PLUS expression                 
@@ -107,12 +167,12 @@ def p_operacoes_logicas_booleanas(t):
         
         
 def p_parameter_list(p):
-    '''ParameterList : Type ID ParameterListRest
+    '''ParameterList : TIPO ID ParameterListRest
                      | empty'''
     pass
 
 def p_parameter_list_rest(p):
-    '''ParameterListRest : VIRGU Type ID ParameterListRest
+    '''ParameterListRest : VIRGU TIPO ID ParameterListRest
                          | empty'''
     pass
 
