@@ -3,28 +3,28 @@ import re
 
 class myLexer(object):
     reservada = {
-        'int' : 'int',
-        'def':  'def',
-        'return': 'return',
-        'while': 'while',
-        'boolean': 'boolean',
-        'class': 'class',
-        'extends': 'extends',
-        'public': 'public',
-        'static': 'static',
-        'void': 'void',
-        'main': 'main',
-        'String' : 'String',
+        'int' : 'INT',
+        'def':  'DEF',
+        'return': 'RETURN',
+        'while': 'WHILE',
+        'boolean': 'BOOLEAN',
+        'class': 'CLASS',
+        'extends': 'EXTENDS',
+        'public': 'PUBLIC',
+        'static': 'STATIC',
+        'void': 'VOID',
+        'main': 'MAIN',
+        'String' : 'STRING',
         'System.out.println': 'PRINT',
-        'if': 'if',
-        'else': 'else',
+        'if': 'IF',
+        'else': 'ELSE',
         'length': 'length',
-        'true': 'true',
-        'false': 'false',
-        'this': 'this',
-        'new': 'new',
-        'null': 'null',
-        'double': 'double'
+        'true': 'TRUE',
+        'false': 'FALSE',
+        'this': 'THIS',
+        'new': 'NEW',
+        'null': 'NULL',
+        'double': 'DOUBLE'
 
     }
 
@@ -127,7 +127,7 @@ class myLexer(object):
 m = myLexer()
 m.build()
 m.test(
-    '''
+    """
     public class Teste {
         public static void main(String[] args) {
             somar();
@@ -150,7 +150,7 @@ m.test(
             return c;
         }
     }
-    '''
+    """
 )
 
 

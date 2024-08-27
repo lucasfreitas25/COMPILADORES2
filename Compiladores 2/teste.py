@@ -1,225 +1,244 @@
-import ply.lex as lex
 import ply.yacc as yacc
-import keyboard as key
-import re
-import ply.lex as lex
 
-tokens = (
-    'CLASS',
-    'PUBLIC',
-    'STATIC',
-    'VOID',
-    'MAIN',
-    'STRING',
-    'INT',
-    'BOOLEAN',
-    'IF',
-    'ELSE',
-    'WHILE',
-    'PRINT',
-    'RETURN',
-    'EXTENDS',
-    'TRUE',
-    'FALSE',
-    'THIS',
-    'NEW',
-    'IDENTIFIER',
-    'INTEGER_LITERAL',
-    'LBRACE',
-    'RBRACE',
-    'LPAREN',
-    'RPAREN',
-    'LBRACKET',
-    'RBRACKET',
-    'SEMI',
-    'COMMA',
-    'DOT',
-    'ASSIGN',
-    'AND',
-    'LT',
-    'PLUS',
-    'MINUS',
-    'TIMES',
-    'NOT'
-)
-
-reserved = {
-    'class': 'CLASS', 
-    'public': 'PUBLIC', 
-    'static': 'STATIC',
-    'void': 'VOID', 
-    'main': 'MAIN', 
-    'String': 'STRING', 
+# Definição de tokens e palavras reservadas
+reservada = {
     'int': 'INT',
+    'def': 'DEF',
+    'return': 'RETURN',
+    'while': 'WHILE',
     'boolean': 'BOOLEAN',
+    'class': 'CLASS',
+    'extends': 'EXTENDS',
+    'public': 'PUBLIC',
+    'static': 'STATIC',
+    'void': 'VOID',
+    'main': 'MAIN',
+    'String': 'STRING',
+    'System.out.println': 'PRINT',
     'if': 'IF',
     'else': 'ELSE',
-    'while': 'WHILE',
-    'System.out.println': 'PRINT',
-    'return': 'RETURN',
-    'extends': 'EXTENDS',
+    'length': 'LENGTH',
     'true': 'TRUE',
     'false': 'FALSE',
     'this': 'THIS',
-    'new': 'NEW'
+    'new': 'NEW',
+    'null': 'NULL',
+    'double': 'DOUBLE'
 }
 
-t_LBRACE = r'\{'
-t_RBRACE = r'\}'
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_LBRACKET = r'\['
-t_RBRACKET = r'\]'
-t_SEMI = r';'
-t_COMMA = r','
-t_DOT = r'\.'
-t_ASSIGN = r'='
-t_AND = r'&&'
-t_LT = r'<'
-t_PLUS = r'\+'
-t_MINUS = r'-'
-t_TIMES = r'\*'
-t_NOT = r'!'
+tokens = [
+    'ID', 'COLON', 'LPAR', 'RPAR', 'MENOS', 'SUM', 'MUL', 'DIVI', 
+    'POINT', 'VIRGU', 'NUMBER', 'ASSIGMENT', 'LCBRA', 'RCBRA', 
+    'DIF', 'IGUAL', 'AND', 'MEN', 'MAI_IGUAL', 'MEN_IGUAL', 'MAI', 
+    'NEG', 'SEMICOLON', 'LSBRA', 'RSBRA'
+] + list(reservada.values())
 
-t_ignore = ' \t'
+# Definindo precedência dos operadores
+precedence = (
+    ('left', 'OP_AD'),
+    ('left', 'OP_MUL'),
+    ('left', 'OP_REL'),
+)
 
-def t_IDENTIFIER(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'IDENTIFIER')
-    return t
+# Definindo a gramática
 
-def t_INTEGER_LITERAL(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
+def p_prog(p):
+    "PROG : PUBLIC CLASS ID LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN LBRACE CMDS RBRACE METODO RBRACE"
+    p[0] = ("PROG", p[13], p[15], p[18])
 
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+def p_metodo(p):
+    """METODO : PUBLIC STATIC TIPO ID LPAREN PARAMS RPAREN LBRACE DC CMDS RETURN EXPRESSAO SEMICOLON RBRACE
+              | empty"""
+    if len(p) == 14:
+        p[0] = ("METODO", p[3], p[4], p[6], p[9], p[10], p[12])
+    else:
+        p[0] = None
 
-def t_error(t):
-    print(f"Illegal character '{t.value[0]}'")
-    t.lexer.skip(1)
+def p_tipo(p):
+    "TIPO : DOUBLE"
+    p[0] = "double"
 
-lexer = lex.lex()
+def p_params(p):
+    """PARAMS : TIPO ID MAIS_PARAMS
+              | empty"""
+    if len(p) == 4:
+        p[0] = ("PARAMS", p[1], p[2], p[3])
+    else:
+        p[0] = None
 
-def p_program(p):
-    'Program : MainClass ClassDeclarationList'
-    pass
+def p_mais_params(p):
+    """MAIS_PARAMS : COMMA PARAMS
+                   | empty"""
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = None
 
-def p_class_declaration_list(p):
-    '''ClassDeclarationList : ClassDeclaration ClassDeclarationList
-                            | empty'''
-    pass
+def p_dc(p):
+    """DC : VAR MAIS_DC
+          | empty"""
+    if len(p) == 3:
+        p[0] = (p[1], p[2])
+    else:
+        p[0] = None
 
-def p_main_class(p):
-    'MainClass : CLASS IDENTIFIER LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET IDENTIFIER RPAREN LBRACE Statement RBRACE RBRACE'
-    pass
+def p_mais_dc(p):
+    """MAIS_DC : SEMICOLON DC
+               | empty"""
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = None
 
-def p_class_declaration(p):
-    '''ClassDeclaration : CLASS IDENTIFIER LBRACE VarDeclarationList MethodDeclarationList RBRACE
-                        | CLASS IDENTIFIER EXTENDS IDENTIFIER LBRACE VarDeclarationList MethodDeclarationList RBRACE'''
-    pass
+def p_var(p):
+    "VAR : TIPO VARS SEMICOLON"
+    p[0] = (p[1], p[2])
 
-def p_var_declaration_list(p):
-    '''VarDeclarationList : VarDeclaration VarDeclarationList
-                          | empty'''
-    pass
+def p_vars(p):
+    "VARS : ID MAIS_VAR"
+    p[0] = [p[1]] + (p[2] if p[2] else [])
 
-def p_var_declaration(p):
-    'VarDeclaration : Type IDENTIFIER SEMI'
-    pass
+def p_mais_var(p):
+    """MAIS_VAR : COMMA VARS
+                | empty"""
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = []
 
-def p_method_declaration_list(p):
-    '''MethodDeclarationList : MethodDeclaration MethodDeclarationList
-                             | empty'''
-    pass
+def p_cmds(p):
+    """CMDS : CMD MAIS_CMDS
+            | empty"""
+    if len(p) == 3:
+        p[0] = [p[1]] + (p[2] if p[2] else [])
+    else:
+        p[0] = []
 
-def p_method_declaration(p):
-    'MethodDeclaration : PUBLIC Type IDENTIFIER LPAREN ParameterList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI RBRACE'
-    pass
+def p_mais_cmds(p):
+    """MAIS_CMDS : SEMICOLON CMDS
+                 | empty"""
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = []
 
-def p_type(p):
-    '''Type : INT LBRACKET RBRACKET
-            | BOOLEAN
-            | INT
-            | IDENTIFIER'''
-    pass
+def p_cmd(p):
+    """CMD : IF LPAREN CONDICAO RPAREN LBRACE CMDS RBRACE PFALSA
+           | WHILE LPAREN CONDICAO RPAREN LBRACE CMDS RBRACE
+           | PRINTLN LPAREN EXPRESSAO RPAREN
+           | ID RESTO_IDENT"""
+    if p[1] == 'if':
+        p[0] = ("if", p[3], p[6], p[8])
+    elif p[1] == 'while':
+        p[0] = ("while", p[3], p[6])
+    elif p[1] == 'System.out.println':
+        p[0] = ("println", p[3])
+    else:
+        p[0] = ("assign_or_call", p[1], p[2])
 
-def p_statement_list(p):
-    '''StatementList : Statement StatementList
-                     | empty'''
-    pass
+def p_pfalsa(p):
+    """PFALSA : ELSE LBRACE CMDS RBRACE
+              | empty"""
+    if len(p) == 5:
+        p[0] = ("else", p[3])
+    else:
+        p[0] = None
 
-def p_statement(p):
-    '''Statement : LBRACE StatementList RBRACE
-                 | IF LPAREN Expression RPAREN Statement ELSE Statement
-                 | WHILE LPAREN Expression RPAREN Statement
-                 | PRINT LPAREN Expression RPAREN SEMI
-                 | IDENTIFIER ASSIGN Expression SEMI
-                 | IDENTIFIER LBRACKET Expression RBRACKET ASSIGN Expression SEMI'''
-    pass
+def p_resto_ident(p):
+    """RESTO_IDENT : ASSIGN EXP_IDENT
+                   | LPAREN LISTA_ARG RPAREN"""
+    if p[1] == '=':
+        p[0] = ("assign", p[2])
+    else:
+        p[0] = ("call", p[2])
 
-def p_expression(p):
-    '''Expression : Expression AND Expression
-                  | Expression LT Expression
-                  | Expression PLUS Expression
-                  | Expression MINUS Expression
-                  | Expression TIMES Expression
-                  | Expression LBRACKET Expression RBRACKET
-                  | Expression DOT IDENTIFIER LPAREN ExpressionList RPAREN
-                  | INTEGER_LITERAL
-                  | TRUE
-                  | FALSE
-                  | IDENTIFIER
-                  | THIS
-                  | NEW INT LBRACKET Expression RBRACKET
-                  | NEW IDENTIFIER LPAREN RPAREN
-                  | NOT Expression
-                  | LPAREN Expression RPAREN'''
-    pass
+def p_lista_arg(p):
+    """LISTA_ARG : ARGUMENTOS
+                 | empty"""
+    p[0] = p[1] if len(p) > 1 else []
 
-def p_parameter_list(p):
-    '''ParameterList : Type IDENTIFIER ParameterListRest
-                     | empty'''
-    pass
+def p_argumentos(p):
+    """ARGUMENTOS : ID MAIS_IDENT"""
+    p[0] = [p[1]] + (p[2] if p[2] else [])
 
-def p_parameter_list_rest(p):
-    '''ParameterListRest : COMMA Type IDENTIFIER ParameterListRest
-                         | empty'''
-    pass
+def p_mais_ident(p):
+    """MAIS_IDENT : COMMA ARGUMENTOS
+                  | empty"""
+    p[0] = p[2] if len(p) > 1 else []
 
-def p_expression_list(p):
-    '''ExpressionList : Expression ExpressionListRest
-                      | empty'''
-    pass
+def p_exp_ident(p):
+    """EXP_IDENT : EXPRESSAO
+                 | LERDOUBLE"""
+    p[0] = p[1]
 
-def p_expression_list_rest(p):
-    '''ExpressionListRest : COMMA Expression ExpressionListRest
-                          | empty'''
-    pass
+def p_condicao(p):
+    "CONDICAO : EXPRESSAO OP_REL EXPRESSAO"
+    p[0] = ("condition", p[1], p[2], p[3])
+
+def p_expressao(p):
+    "EXPRESSAO : TERMO OUTROS_TERMOS"
+    p[0] = (p[1], p[2])
+
+def p_termo(p):
+    "TERMO : OP_UN FATOR MAIS_FATORES"
+    p[0] = (p[1], p[2], p[3])
+
+def p_op_un(p):
+    """OP_UN : '-'
+             | empty"""
+    p[0] = p[1] if len(p) > 1 else None
+
+def p_fator(p):
+    """FATOR : ID
+             | NUMERO_REAL
+             | LPAREN EXPRESSAO RPAREN"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = p[2]
+
+def p_outros_termos(p):
+    """OUTROS_TERMOS : OP_AD TERMO OUTROS_TERMOS
+                     | empty"""
+    if len(p) == 4:
+        p[0] = (p[1], p[2], p[3])
+    else:
+        p[0] = None
+
+def p_op_ad(p):
+    """OP_AD : '+'
+             | '-'"""
+    p[0] = p[1]
+
+def p_mais_fatores(p):
+    """MAIS_FATORES : OP_MUL FATOR MAIS_FATORES
+                    | empty"""
+    if len(p) == 4:
+        p[0] = (p[1], p[2], p[3])
+    else:
+        p[0] = None
+
+def p_op_mul(p):
+    """OP_MUL : '*'
+              | '/'"""
+    p[0] = p[1]
 
 def p_empty(p):
-    'empty :'
-    pass
+    "empty :"
+    p[0] = None
 
+# Tratamento de erros
 def p_error(p):
-    if p:
-        print(f"Syntax error at '{p.value}'")
-    else:
-        print("Syntax error at EOF")
+    print(f"Erro de sintaxe em {p.value}")
 
+# Construa o parser
 parser = yacc.yacc()
-data = '''
-class Main {
-    public static void main(String[] args) {
-        System.out.println(1);
-    }
-}
-'''
 
-lexer.input(data)
-for token in lexer:
-    print(token)
-
-parser.parse(data)
+if __name__ == "__main__":
+    try:
+        with open("tokens.txt", "r") as f:
+            data = f.read()
+            parser.parse(data)
+            print("Análise concluída sem erros.")
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")

@@ -1,205 +1,236 @@
 import ply.yacc as yacc
-import keyboard as key
-import re
-from lexico import myLexer, tokens
+from lexico import myLexer
+
+# Definição de tokens e palavras reservadas
+reservada = {
+    'int': 'INT',
+    'def': 'DEF',
+    'return': 'RETURN',
+    'while': 'WHILE',
+    'boolean': 'BOOLEAN',
+    'class': 'CLASS',
+    'extends': 'EXTENDS',
+    'public': 'PUBLIC',
+    'static': 'STATIC',
+    'void': 'VOID',
+    'main': 'MAIN',
+    'String': 'STRING',
+    'System.out.println': 'PRINT',
+    'if': 'IF',
+    'else': 'ELSE',
+    'length': 'LENGTH',
+    'true': 'TRUE',
+    'false': 'FALSE',
+    'this': 'THIS',
+    'new': 'NEW',
+    'null': 'NULL',
+    'double': 'DOUBLE'
+}
 
 tokens = [
-    'ID',
-    'COLON', # :
-    'LPAR', # (
-    'RPAR', # )
-    'MENOS', # -
-    'SUM', # +
-    'MUL', # *
-    'DIVI', # /
-    'POINT', # .
-    'VIRGU', # ,
-    'NUMBER',
-    'ASSIGMENT', # =
-    'LCBRA', # {
-    'RCBRA', # }
-    'DIF', # !=
-    'IGUAL', # ==
-    'AND', # &&
-    'MEN', # <
-    'MAI_IGUAL', # >=
-    'MEN_IGUAL', # <=
-    'MAI', # >
-    'NEG', # !
-    'SEMICOLON', # ;
-    'LSBRA', # [
-    'RSBRA' # ] 
-    ] 
+    'ID', 'COLON', 'LPAR', 'RPAR', 'MENOS', 'SUM', 'MUL', 'DIVI', 
+    'POINT', 'VIRGU', 'NUMBER', 'ASSIGMENT', 'LCBRA', 'RCBRA', 
+    'DIF', 'IGUAL', 'AND', 'MEN', 'MAI_IGUAL', 'MEN_IGUAL', 'MAI', 
+    'NEG', 'SEMICOLON', 'LSBRA', 'RSBRA'
+] + list(reservada.values())
 
-procedencia = (
+# Definição de precedência
+precedencia = (
     ('left', 'SUM', 'MENOS'),
     ('left', 'MUL', 'DIVI'),
 )
 
-def p_program(p):
-    'Program : MainClass ClassDeclarationList'
-    pass
-
-def p_class_declaration_list(p):
-    '''ClassDeclarationList : ClassDeclaration ClassDeclarationList
-                            | empty'''
-    pass
-
-#Definição da MAIN
+# Definição da gramática
 def p_prog(p):
-    'PROG : PUBLIC CLASS ID LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN LBRACE CMDS RBRACE METODO RBRACE'
+    'PROG : PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA'
     pass
 
-#Definição quando ha extends
-def p_class_declaration(p):
-    '''ClassDeclaration : CLASS ID LBRACE VarDeclarationList MethodDeclarationList RBRACE
-                        | CLASS ID EXTENDS ID LBRACE VarDeclarationList MethodDeclarationList RBRACE'''
-    pass
-
-def p_method_declaration_list(p):
-    '''MethodDeclarationList : MethodDeclaration MethodDeclarationList
-                             | empty'''
-    pass
-
-#Definição do metodos
 def p_metodo(p):
-    '''METODO : PUBLIC STATIC TIPO ID LPAREN PARAMS RPAREN LBRACE DC CMDS RETURN EXPRESSAO SEMI RBRACE
-              | empty'''
+    """METODO : PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
+              | empty"""
     pass
 
-#Defini as regras dos parametros do metodos
 def p_params(p):
-    '''PARAMS : TIPO ID MAIS_PARAMS
-              | empty'''
+    """PARAMS : TIPO ID MAIS_PARAMS
+              | empty"""
     pass
 
-#Virgula apos o outro parametro
 def p_mais_params(p):
-    '''MAIS_PARAMS : VIRGU PARAMS
-                   | empty'''
+    """MAIS_PARAMS : VIRGU PARAMS
+                   | empty"""
     pass
 
-#Mais de uma declaração
 def p_dc(p):
-    '''DC : VAR MAIS_DC
-          | empty'''
+    """DC : VAR MAIS_DC
+          | empty"""
     pass
 
-#ponto e virgula entre parametros
 def p_mais_dc(p):
-    '''MAIS_DC : SEMI DC
-               | empty'''
+    """MAIS_DC : SEMICOLON DC
+               | empty"""
     pass
 
-#Defini as regras de declaração de variavel
-def p_var_declaration_list(p):
-    '''VarDeclarationList : VarDeclaration VarDeclarationList
-                          | empty'''
-    pass
-    
 def p_var(p):
-    'VAR : TIPO VARS SEMI'
+    'VAR : TIPO VARS SEMICOLON'
     pass
 
 def p_vars(p):
-    'VARS :  ID MAIS_VAR '
+    'VARS : ID MAIS_VAR'
     pass
 
-#VIRGULA APOS MAIS VARIAVEIS
 def p_mais_var(p):
-    '''MAIS_VAR : VIRGU VARS
-                | empty'''
+    """MAIS_VAR : VIRGU VARS
+                | empty"""
     pass
-#TIPOS ACEITOS
+
 def p_tipo(p):
-    '''TIPO : INT LBRACKET RBRACKET
-            | BOOLEAN
-            | INT
-            | ID
-            | DOUBLE
-            '''
+    """TIPO : DOUBLE"""
     pass
 
 def p_cmds(p):
-    '''CMDS : CMD MAIS_CMDS
-            | empty'''
+    """CMDS : CMD MAIS_CMDS
+            | empty"""
     pass
 
 def p_mais_cmds(p):
-    '''MAIS_CMDS : SEMI CMDS
-                 | empty'''
+    """MAIS_CMDS : SEMICOLON CMDS
+                 | empty"""
     pass
-def p_statement_condicionais(p):
-    '''
-    statement : 
-    '''
 
-def operacoes(p):
-    '''expressão: PLUS expression                 
-           | expression MINUS expression                
-           | expression TIMES expression                
-           | expression DIVIDE expression               
-           | LPAREN expression RPAREN                   
-           | NUMBER  
-                  '''
-                  
+def p_cmd(p):
+    """CMD : IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
+           | WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
+           | PRINT LPAR EXPRESSAO RPAR
+           | ID RESTO_IDENT"""
+    pass
+
+def p_pfalsa(p):
+    """PFALSA : ELSE LCBRA CMDS RCBRA 
+              | empty"""
+    pass
+
+def p_resto_ident(p):
+    """RESTO_IDENT : IGUAL EXP_IDENT
+                   | LPAR LISTA_ARG RPAR"""
+    pass
+
+def p_condicao(p):
+    """CONDICAO : EXPRESSAO IGUAL EXPRESSAO
+                | EXPRESSAO MEN EXPRESSAO
+                | EXPRESSAO MEN_IGUAL EXPRESSAO
+                | EXPRESSAO MAI EXPRESSAO
+                | EXPRESSAO MAI_IGUAL EXPRESSAO
+                | EXPRESSAO DIF EXPRESSAO
+                | NEG EXPRESSAO"""
+    if len(p) == 5:  
+        if p[2] == '==':
+            p[0] = p[1] == p[3]
+        elif p[2] == '<':
+            p[0] = p[1] < p[3]
+        elif p[2] == '<=':
+            p[0] = p[1] <= p[3]
+        elif p[2] == '>':
+            p[0] = p[1] > p[3]
+        elif p[2] == '>=':
+            p[0] = p[1] >= p[3]
+        elif p[2] == '!=':
+            p[0] = p[1] != p[3]
+    elif len(p) == 3: 
+        p[0] = not p[2]
+    
+    
+def p_lista_arg(p):
+    """LISTA_ARG : ARGUMENTOS 
+                 | empty"""
+    pass
+
+def p_argumentos(p):
+    """ARGUMENTOS : ID MAIS_IDENT 
+                  | empty"""
+    pass
+
+def p_mais_ident(p):
+    """MAIS_IDENT : VIRGU ARGUMENTOS 
+                  | empty"""
+    pass
+
+def p_exp_ident(p):
+    """EXP_IDENT : EXPRESSAO
+                 | TERMO"""
+    p[0] = p[1]
+
+# def p_condicao(p):
+#     """CONDICAO : EXPRESSAO RELACAO EXPRESSAO"""
+#     pass
+
+def p_expressao(p):
+    "EXPRESSAO : TERMO OUTROS_TERMOS"
+    pass
+
+def p_termo(p):
+    """TERMO : OP_UN FATOR MAIS_FATORES"""
+    pass
+
+def p_op_un(p):
+    """OP_UN : MENOS
+             | empty"""
+    pass
+
+def p_fator(p):
+    """FATOR : ID
+             | DOUBLE
+             | LPAR EXPRESSAO RPAR"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = p[2]
+
+def p_outros_termos(p):
+    """OUTROS_TERMOS : OP_AD TERMO OUTROS_TERMOS
+                     | empty"""
+    pass
+
+def p_op_ad(p):
+    """OP_AD : SUM
+             | MENOS"""
     if p[2] == '+':
         p[0] = p[1] + p[3]
     elif p[2] == '-':
         p[0] = p[1] - p[3]
-    elif p[2] == '*':
+        
+        
+def p_mais_fatores(p):
+    """MAIS_FATORES : OP_MUL FATOR MAIS_FATORES
+                    | empty"""
+    pass
+
+def p_op_mul(p):
+    """OP_MUL : MUL
+              | DIVI"""
+    if p[2] == '*':
         p[0] = p[1] * p[3]
     elif p[2] == '/':
-        p[0] = p[1] /p[3]
-        
-def p_operacoes_logicas_booleanas(t):
-    '''expression : expression MAIOR expression
-                  | expression MENOR expression
-                  | expression EQUALS expression
-                  | expression DIFF expression
-                  | expression AND expression
-                  '''
-    if t[2] == '>'  : t[0] = t[1] > t[3]
-    elif t[2] == '<': t[0] = t[1] < t[3]
-    elif t[2] == '==': t[0] = t[1] == t[3]
-    elif t[2] == '!=': t[0] = t[1] != t[3]
-    elif t[2] == '&&': t[0] = t[1] and t[3]
-        
-        
-def p_parameter_list(p):
-    '''ParameterList : TIPO ID ParameterListRest
-                     | empty'''
+        p[0] = p[1] / p[3]
+
+def p_empty(p):
+    """empty :"""
     pass
 
-def p_parameter_list_rest(p):
-    '''ParameterListRest : VIRGU TIPO ID ParameterListRest
-                         | empty'''
-    pass
 
-def p_expression_list(p):
-    '''ExpressionList : Expression ExpressionListRest
-                      | empty'''
-    pass
-
-def p_expression_list_rest(p):
-    '''ExpressionListRest : VIRGU Expression ExpressionListRest
-                          | empty'''
-    pass
-
-def p_vazio(p):
-    'optitem : item'
-    '        | vazio'
-    ...
-            
 def p_error(p):
     if p:
-        print(f"Erro de sintaxe em '{p.value}'")
+        print(f"Erro de sintaxe em '{p.value}' na linha {p.lineno}")
     else:
-        print("Erro de sintaxe em EOF")
-        
-parser = yacc.yacc()    
+        print("Erro de sintaxe no final do arquivo (EOF)")
+
+
+parser = yacc.yacc()
 
 if __name__ == "__main__":
-    with open("tokens.txt", "r") as f:
-        data = f.read()
-        parser.parse(data)
+    try:
+        with open("tokens.txt", "r") as f:
+            data = f.read()
+            parser.parse(data)
+            print("Análise concluída sem erros.")
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
