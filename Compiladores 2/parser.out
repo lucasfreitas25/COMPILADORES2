@@ -7,79 +7,97 @@ Unused terminals:
     BOOLEAN
     COLON
     DEF
+    DIF
+    DIVI
     EXTENDS
     FALSE
+    IGUAL
     INT
-    LENGTH
+    LCBRA
+    LPAR
+    LSBRA
+    MAI
+    MAI_IGUAL
+    MEN
+    MENOS
+    MEN_IGUAL
+    MUL
+    NEG
     NEW
     NULL
     NUMBER
     POINT
+    PRINT
+    RCBRA
+    RPAR
+    RSBRA
+    SUM
     THIS
     TRUE
+    VIRGU
+    length
 
 Grammar
 
 Rule 0     S' -> PROG
-Rule 1     PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-Rule 2     METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
+Rule 1     PROG -> PUBLIC CLASS ID LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN LBRACE CMDS RBRACE METODO RBRACE
+Rule 2     METODO -> PUBLIC STATIC TIPO ID LPAREN PARAMS RPAREN LBRACE DC CMDS RETURN EXPRESSAO SEMICOLON RBRACE
 Rule 3     METODO -> empty
 Rule 4     PARAMS -> TIPO ID MAIS_PARAMS
 Rule 5     PARAMS -> empty
-Rule 6     MAIS_PARAMS -> VIRGU PARAMS
+Rule 6     MAIS_PARAMS -> COMMA PARAMS
 Rule 7     MAIS_PARAMS -> empty
 Rule 8     DC -> VAR MAIS_DC
 Rule 9     DC -> empty
 Rule 10    MAIS_DC -> SEMICOLON DC
 Rule 11    MAIS_DC -> empty
-Rule 12    VAR -> TIPO VARS SEMICOLON
+Rule 12    VAR -> TIPO VARS
 Rule 13    VARS -> ID MAIS_VAR
-Rule 14    MAIS_VAR -> VIRGU VARS
+Rule 14    MAIS_VAR -> COMMA VARS
 Rule 15    MAIS_VAR -> empty
 Rule 16    TIPO -> DOUBLE
 Rule 17    CMDS -> CMD MAIS_CMDS
 Rule 18    CMDS -> empty
 Rule 19    MAIS_CMDS -> SEMICOLON CMDS
 Rule 20    MAIS_CMDS -> empty
-Rule 21    CMD -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-Rule 22    CMD -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-Rule 23    CMD -> PRINT LPAR EXPRESSAO RPAR
+Rule 21    CMD -> IF LPAREN CONDICAO RPAREN LBRACE CMDS RBRACE PFALSA
+Rule 22    CMD -> WHILE LPAREN CONDICAO RPAREN LBRACE CMDS RBRACE
+Rule 23    CMD -> PRINTLN LPAREN EXPRESSAO RPAREN
 Rule 24    CMD -> ID RESTO_IDENT
-Rule 25    PFALSA -> ELSE LCBRA CMDS RCBRA
+Rule 25    PFALSA -> ELSE LBRACE CMDS RBRACE
 Rule 26    PFALSA -> empty
-Rule 27    RESTO_IDENT -> IGUAL EXP_IDENT
-Rule 28    RESTO_IDENT -> LPAR LISTA_ARG RPAR
-Rule 29    CONDICAO -> EXPRESSAO IGUAL EXPRESSAO
-Rule 30    CONDICAO -> EXPRESSAO MEN EXPRESSAO
-Rule 31    CONDICAO -> EXPRESSAO MEN_IGUAL EXPRESSAO
-Rule 32    CONDICAO -> EXPRESSAO MAI EXPRESSAO
-Rule 33    CONDICAO -> EXPRESSAO MAI_IGUAL EXPRESSAO
-Rule 34    CONDICAO -> EXPRESSAO DIF EXPRESSAO
-Rule 35    CONDICAO -> NEG EXPRESSAO
-Rule 36    LISTA_ARG -> ARGUMENTOS
-Rule 37    LISTA_ARG -> empty
-Rule 38    ARGUMENTOS -> ID MAIS_IDENT
-Rule 39    ARGUMENTOS -> empty
-Rule 40    MAIS_IDENT -> VIRGU ARGUMENTOS
-Rule 41    MAIS_IDENT -> empty
-Rule 42    EXP_IDENT -> EXPRESSAO
-Rule 43    EXP_IDENT -> TERMO
-Rule 44    EXPRESSAO -> TERMO OUTROS_TERMOS
-Rule 45    TERMO -> OP_UN FATOR MAIS_FATORES
-Rule 46    OP_UN -> MENOS
-Rule 47    OP_UN -> empty
-Rule 48    FATOR -> ID
-Rule 49    FATOR -> DOUBLE
-Rule 50    FATOR -> LPAR EXPRESSAO RPAR
-Rule 51    OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS
-Rule 52    OUTROS_TERMOS -> empty
-Rule 53    OP_AD -> SUM
-Rule 54    OP_AD -> MENOS
-Rule 55    MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES
-Rule 56    MAIS_FATORES -> empty
-Rule 57    OP_MUL -> MUL
-Rule 58    OP_MUL -> DIVI
-Rule 59    empty -> <empty>
+Rule 27    RESTO_IDENT -> ASSIGN EXP_IDENT
+Rule 28    RESTO_IDENT -> LPAREN LISTA_ARG RPAREN
+Rule 29    LISTA_ARG -> ARGUMENTOS
+Rule 30    LISTA_ARG -> empty
+Rule 31    ARGUMENTOS -> ID MAIS_IDENT
+Rule 32    MAIS_IDENT -> COMMA ARGUMENTOS
+Rule 33    MAIS_IDENT -> empty
+Rule 34    EXP_IDENT -> EXPRESSAO
+Rule 35    EXP_IDENT -> LERDOUBLE LPAREN RPAREN
+Rule 36    CONDICAO -> EXPRESSAO RELACAO EXPRESSAO
+Rule 37    RELACAO -> EQ
+Rule 38    RELACAO -> NEQ
+Rule 39    RELACAO -> GEQ
+Rule 40    RELACAO -> LEQ
+Rule 41    RELACAO -> GT
+Rule 42    RELACAO -> LT
+Rule 43    EXPRESSAO -> TERMO OUTROS_TERMOS
+Rule 44    TERMO -> OP_UN FATOR MAIS_FATORES
+Rule 45    OP_UN -> MINUS
+Rule 46    OP_UN -> empty
+Rule 47    FATOR -> ID
+Rule 48    FATOR -> NUMERO_REAL
+Rule 49    FATOR -> LPAREN EXPRESSAO RPAREN
+Rule 50    OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS
+Rule 51    OUTROS_TERMOS -> empty
+Rule 52    OP_AD -> PLUS
+Rule 53    OP_AD -> MINUS
+Rule 54    MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES
+Rule 55    MAIS_FATORES -> empty
+Rule 56    OP_MUL -> TIMES
+Rule 57    OP_MUL -> DIVIDE
+Rule 58    empty -> <empty>
 
 Terminals, with rules where they appear
 
@@ -89,1765 +107,100 @@ BOOLEAN              :
 CLASS                : 1
 COLON                : 
 DEF                  : 
-DIF                  : 34
-DIVI                 : 58
-DOUBLE               : 16 49
+DIF                  : 
+DIVI                 : 
+DOUBLE               : 16
 ELSE                 : 25
 EXTENDS              : 
 FALSE                : 
-ID                   : 1 1 2 4 13 24 38 48
+ID                   : 1 1 2 4 13 24 31 47
 IF                   : 21
-IGUAL                : 27 29
+IGUAL                : 
 INT                  : 
-LCBRA                : 1 1 2 21 22 25
-LENGTH               : 
-LPAR                 : 1 2 21 22 23 28 50
-LSBRA                : 1
-MAI                  : 32
+LCBRA                : 
+LPAR                 : 
+LSBRA                : 
+MAI                  : 
 MAIN                 : 1
-MAI_IGUAL            : 33
-MEN                  : 30
-MENOS                : 46 54
-MEN_IGUAL            : 31
-MUL                  : 57
-NEG                  : 35
+MAI_IGUAL            : 
+MEN                  : 
+MENOS                : 
+MEN_IGUAL            : 
+MUL                  : 
+NEG                  : 
 NEW                  : 
 NULL                 : 
 NUMBER               : 
 POINT                : 
-PRINT                : 23
+PRINT                : 
 PUBLIC               : 1 1 2
-RCBRA                : 1 1 2 21 22 25
+RCBRA                : 
 RETURN               : 2
-RPAR                 : 1 2 21 22 23 28 50
-RSBRA                : 1
-SEMICOLON            : 2 10 12 19
+RPAR                 : 
+RSBRA                : 
+SEMICOLON            : 2 10 19
 STATIC               : 1 2
 STRING               : 1
-SUM                  : 53
+SUM                  : 
 THIS                 : 
 TRUE                 : 
-VIRGU                : 6 14 40
+VIRGU                : 
 VOID                 : 1
 WHILE                : 22
 error                : 
+length               : 
 
 Nonterminals, with rules where they appear
 
-ARGUMENTOS           : 36 40
+ARGUMENTOS           : 29 32
+ASSIGN               : 27
 CMD                  : 17
 CMDS                 : 1 2 19 21 22 25
+COMMA                : 6 14 32
 CONDICAO             : 21 22
 DC                   : 2 10
-EXPRESSAO            : 2 23 29 29 30 30 31 31 32 32 33 33 34 34 35 42 50
+DIVIDE               : 57
+EQ                   : 37
+EXPRESSAO            : 2 23 34 36 36 49
 EXP_IDENT            : 27
-FATOR                : 45 55
+FATOR                : 44 54
+GEQ                  : 39
+GT                   : 41
+LBRACE               : 1 1 2 21 22 25
+LBRACKET             : 1
+LEQ                  : 40
+LERDOUBLE            : 35
 LISTA_ARG            : 28
+LPAREN               : 1 2 21 22 23 28 35 49
+LT                   : 42
 MAIS_CMDS            : 17
 MAIS_DC              : 8
-MAIS_FATORES         : 45 55
-MAIS_IDENT           : 38
+MAIS_FATORES         : 44 54
+MAIS_IDENT           : 31
 MAIS_PARAMS          : 4
 MAIS_VAR             : 13
 METODO               : 1
-OP_AD                : 51
-OP_MUL               : 55
-OP_UN                : 45
-OUTROS_TERMOS        : 44 51
+MINUS                : 45 53
+NEQ                  : 38
+NUMERO_REAL          : 48
+OP_AD                : 50
+OP_MUL               : 54
+OP_UN                : 44
+OUTROS_TERMOS        : 43 50
 PARAMS               : 2 6
 PFALSA               : 21
+PLUS                 : 52
+PRINTLN              : 23
 PROG                 : 0
+RBRACE               : 1 1 2 21 22 25
+RBRACKET             : 1
+RELACAO              : 36
 RESTO_IDENT          : 24
-TERMO                : 43 44 51
+RPAREN               : 1 2 21 22 23 28 35 49
+TERMO                : 43 50
+TIMES                : 56
 TIPO                 : 2 4 12
 VAR                  : 8
 VARS                 : 12 14
-empty                : 3 5 7 9 11 15 18 20 26 37 39 41 47 52 56
+empty                : 3 5 7 9 11 15 18 20 26 30 33 46 51 55
 
-Parsing method: LALR
-
-state 0
-
-    (0) S' -> . PROG
-    (1) PROG -> . PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    PUBLIC          shift and go to state 2
-
-    PROG                           shift and go to state 1
-
-state 1
-
-    (0) S' -> PROG .
-
-
-
-state 2
-
-    (1) PROG -> PUBLIC . CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    CLASS           shift and go to state 3
-
-
-state 3
-
-    (1) PROG -> PUBLIC CLASS . ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    ID              shift and go to state 4
-
-
-state 4
-
-    (1) PROG -> PUBLIC CLASS ID . LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    LCBRA           shift and go to state 5
-
-
-state 5
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA . PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    PUBLIC          shift and go to state 6
-
-
-state 6
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC . STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    STATIC          shift and go to state 7
-
-
-state 7
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC . VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    VOID            shift and go to state 8
-
-
-state 8
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID . MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    MAIN            shift and go to state 9
-
-
-state 9
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN . LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    LPAR            shift and go to state 10
-
-
-state 10
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR . STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    STRING          shift and go to state 11
-
-
-state 11
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING . LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    LSBRA           shift and go to state 12
-
-
-state 12
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA . RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    RSBRA           shift and go to state 13
-
-
-state 13
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA . ID RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    ID              shift and go to state 14
-
-
-state 14
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID . RPAR LCBRA CMDS RCBRA METODO RCBRA
-
-    RPAR            shift and go to state 15
-
-
-state 15
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR . LCBRA CMDS RCBRA METODO RCBRA
-
-    LCBRA           shift and go to state 16
-
-
-state 16
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA . CMDS RCBRA METODO RCBRA
-    (17) CMDS -> . CMD MAIS_CMDS
-    (18) CMDS -> . empty
-    (21) CMD -> . IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-    (22) CMD -> . WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-    (23) CMD -> . PRINT LPAR EXPRESSAO RPAR
-    (24) CMD -> . ID RESTO_IDENT
-    (59) empty -> .
-
-    IF              shift and go to state 21
-    WHILE           shift and go to state 22
-    PRINT           shift and go to state 23
-    ID              shift and go to state 17
-    RCBRA           reduce using rule 59 (empty -> .)
-
-    CMDS                           shift and go to state 18
-    CMD                            shift and go to state 19
-    empty                          shift and go to state 20
-
-state 17
-
-    (24) CMD -> ID . RESTO_IDENT
-    (27) RESTO_IDENT -> . IGUAL EXP_IDENT
-    (28) RESTO_IDENT -> . LPAR LISTA_ARG RPAR
-
-    IGUAL           shift and go to state 25
-    LPAR            shift and go to state 26
-
-    RESTO_IDENT                    shift and go to state 24
-
-state 18
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS . RCBRA METODO RCBRA
-
-    RCBRA           shift and go to state 27
-
-
-state 19
-
-    (17) CMDS -> CMD . MAIS_CMDS
-    (19) MAIS_CMDS -> . SEMICOLON CMDS
-    (20) MAIS_CMDS -> . empty
-    (59) empty -> .
-
-    SEMICOLON       shift and go to state 29
-    RCBRA           reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-
-    MAIS_CMDS                      shift and go to state 28
-    empty                          shift and go to state 30
-
-state 20
-
-    (18) CMDS -> empty .
-
-    RCBRA           reduce using rule 18 (CMDS -> empty .)
-    RETURN          reduce using rule 18 (CMDS -> empty .)
-
-
-state 21
-
-    (21) CMD -> IF . LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-
-    LPAR            shift and go to state 31
-
-
-state 22
-
-    (22) CMD -> WHILE . LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-
-    LPAR            shift and go to state 32
-
-
-state 23
-
-    (23) CMD -> PRINT . LPAR EXPRESSAO RPAR
-
-    LPAR            shift and go to state 33
-
-
-state 24
-
-    (24) CMD -> ID RESTO_IDENT .
-
-    SEMICOLON       reduce using rule 24 (CMD -> ID RESTO_IDENT .)
-    RCBRA           reduce using rule 24 (CMD -> ID RESTO_IDENT .)
-    RETURN          reduce using rule 24 (CMD -> ID RESTO_IDENT .)
-
-
-state 25
-
-    (27) RESTO_IDENT -> IGUAL . EXP_IDENT
-    (42) EXP_IDENT -> . EXPRESSAO
-    (43) EXP_IDENT -> . TERMO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXP_IDENT                      shift and go to state 34
-    EXPRESSAO                      shift and go to state 35
-    TERMO                          shift and go to state 36
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 26
-
-    (28) RESTO_IDENT -> LPAR . LISTA_ARG RPAR
-    (36) LISTA_ARG -> . ARGUMENTOS
-    (37) LISTA_ARG -> . empty
-    (38) ARGUMENTOS -> . ID MAIS_IDENT
-    (39) ARGUMENTOS -> . empty
-    (59) empty -> .
-
-    ID              shift and go to state 43
-    RPAR            reduce using rule 59 (empty -> .)
-
-    LISTA_ARG                      shift and go to state 40
-    ARGUMENTOS                     shift and go to state 41
-    empty                          shift and go to state 42
-
-state 27
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA . METODO RCBRA
-    (2) METODO -> . PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-    (3) METODO -> . empty
-    (59) empty -> .
-
-    PUBLIC          shift and go to state 44
-    RCBRA           reduce using rule 59 (empty -> .)
-
-    METODO                         shift and go to state 45
-    empty                          shift and go to state 46
-
-state 28
-
-    (17) CMDS -> CMD MAIS_CMDS .
-
-    RCBRA           reduce using rule 17 (CMDS -> CMD MAIS_CMDS .)
-    RETURN          reduce using rule 17 (CMDS -> CMD MAIS_CMDS .)
-
-
-state 29
-
-    (19) MAIS_CMDS -> SEMICOLON . CMDS
-    (17) CMDS -> . CMD MAIS_CMDS
-    (18) CMDS -> . empty
-    (21) CMD -> . IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-    (22) CMD -> . WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-    (23) CMD -> . PRINT LPAR EXPRESSAO RPAR
-    (24) CMD -> . ID RESTO_IDENT
-    (59) empty -> .
-
-    IF              shift and go to state 21
-    WHILE           shift and go to state 22
-    PRINT           shift and go to state 23
-    ID              shift and go to state 17
-    RCBRA           reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-
-    CMDS                           shift and go to state 47
-    CMD                            shift and go to state 19
-    empty                          shift and go to state 20
-
-state 30
-
-    (20) MAIS_CMDS -> empty .
-
-    RCBRA           reduce using rule 20 (MAIS_CMDS -> empty .)
-    RETURN          reduce using rule 20 (MAIS_CMDS -> empty .)
-
-
-state 31
-
-    (21) CMD -> IF LPAR . CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-    (29) CONDICAO -> . EXPRESSAO IGUAL EXPRESSAO
-    (30) CONDICAO -> . EXPRESSAO MEN EXPRESSAO
-    (31) CONDICAO -> . EXPRESSAO MEN_IGUAL EXPRESSAO
-    (32) CONDICAO -> . EXPRESSAO MAI EXPRESSAO
-    (33) CONDICAO -> . EXPRESSAO MAI_IGUAL EXPRESSAO
-    (34) CONDICAO -> . EXPRESSAO DIF EXPRESSAO
-    (35) CONDICAO -> . NEG EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    NEG             shift and go to state 50
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    CONDICAO                       shift and go to state 48
-    EXPRESSAO                      shift and go to state 49
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 32
-
-    (22) CMD -> WHILE LPAR . CONDICAO RPAR LCBRA CMDS RCBRA
-    (29) CONDICAO -> . EXPRESSAO IGUAL EXPRESSAO
-    (30) CONDICAO -> . EXPRESSAO MEN EXPRESSAO
-    (31) CONDICAO -> . EXPRESSAO MEN_IGUAL EXPRESSAO
-    (32) CONDICAO -> . EXPRESSAO MAI EXPRESSAO
-    (33) CONDICAO -> . EXPRESSAO MAI_IGUAL EXPRESSAO
-    (34) CONDICAO -> . EXPRESSAO DIF EXPRESSAO
-    (35) CONDICAO -> . NEG EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    NEG             shift and go to state 50
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    CONDICAO                       shift and go to state 52
-    EXPRESSAO                      shift and go to state 49
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 33
-
-    (23) CMD -> PRINT LPAR . EXPRESSAO RPAR
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 53
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 34
-
-    (27) RESTO_IDENT -> IGUAL EXP_IDENT .
-
-    SEMICOLON       reduce using rule 27 (RESTO_IDENT -> IGUAL EXP_IDENT .)
-    RCBRA           reduce using rule 27 (RESTO_IDENT -> IGUAL EXP_IDENT .)
-    RETURN          reduce using rule 27 (RESTO_IDENT -> IGUAL EXP_IDENT .)
-
-
-state 35
-
-    (42) EXP_IDENT -> EXPRESSAO .
-
-    SEMICOLON       reduce using rule 42 (EXP_IDENT -> EXPRESSAO .)
-    RCBRA           reduce using rule 42 (EXP_IDENT -> EXPRESSAO .)
-    RETURN          reduce using rule 42 (EXP_IDENT -> EXPRESSAO .)
-
-
-state 36
-
-    (43) EXP_IDENT -> TERMO .
-    (44) EXPRESSAO -> TERMO . OUTROS_TERMOS
-    (51) OUTROS_TERMOS -> . OP_AD TERMO OUTROS_TERMOS
-    (52) OUTROS_TERMOS -> . empty
-    (53) OP_AD -> . SUM
-    (54) OP_AD -> . MENOS
-    (59) empty -> .
-
-  ! reduce/reduce conflict for SEMICOLON resolved using rule 43 (EXP_IDENT -> TERMO .)
-  ! reduce/reduce conflict for RCBRA resolved using rule 43 (EXP_IDENT -> TERMO .)
-  ! reduce/reduce conflict for RETURN resolved using rule 43 (EXP_IDENT -> TERMO .)
-    SEMICOLON       reduce using rule 43 (EXP_IDENT -> TERMO .)
-    RCBRA           reduce using rule 43 (EXP_IDENT -> TERMO .)
-    RETURN          reduce using rule 43 (EXP_IDENT -> TERMO .)
-    SUM             shift and go to state 57
-    MENOS           shift and go to state 58
-
-  ! SEMICOLON       [ reduce using rule 59 (empty -> .) ]
-  ! RCBRA           [ reduce using rule 59 (empty -> .) ]
-  ! RETURN          [ reduce using rule 59 (empty -> .) ]
-
-    OUTROS_TERMOS                  shift and go to state 54
-    OP_AD                          shift and go to state 55
-    empty                          shift and go to state 56
-
-state 37
-
-    (45) TERMO -> OP_UN . FATOR MAIS_FATORES
-    (48) FATOR -> . ID
-    (49) FATOR -> . DOUBLE
-    (50) FATOR -> . LPAR EXPRESSAO RPAR
-
-    ID              shift and go to state 60
-    DOUBLE          shift and go to state 61
-    LPAR            shift and go to state 62
-
-    FATOR                          shift and go to state 59
-
-state 38
-
-    (46) OP_UN -> MENOS .
-
-    ID              reduce using rule 46 (OP_UN -> MENOS .)
-    DOUBLE          reduce using rule 46 (OP_UN -> MENOS .)
-    LPAR            reduce using rule 46 (OP_UN -> MENOS .)
-
-
-state 39
-
-    (47) OP_UN -> empty .
-
-    ID              reduce using rule 47 (OP_UN -> empty .)
-    DOUBLE          reduce using rule 47 (OP_UN -> empty .)
-    LPAR            reduce using rule 47 (OP_UN -> empty .)
-
-
-state 40
-
-    (28) RESTO_IDENT -> LPAR LISTA_ARG . RPAR
-
-    RPAR            shift and go to state 63
-
-
-state 41
-
-    (36) LISTA_ARG -> ARGUMENTOS .
-
-    RPAR            reduce using rule 36 (LISTA_ARG -> ARGUMENTOS .)
-
-
-state 42
-
-    (37) LISTA_ARG -> empty .
-    (39) ARGUMENTOS -> empty .
-
-  ! reduce/reduce conflict for RPAR resolved using rule 37 (LISTA_ARG -> empty .)
-    RPAR            reduce using rule 37 (LISTA_ARG -> empty .)
-
-  ! RPAR            [ reduce using rule 39 (ARGUMENTOS -> empty .) ]
-
-
-state 43
-
-    (38) ARGUMENTOS -> ID . MAIS_IDENT
-    (40) MAIS_IDENT -> . VIRGU ARGUMENTOS
-    (41) MAIS_IDENT -> . empty
-    (59) empty -> .
-
-    VIRGU           shift and go to state 65
-    RPAR            reduce using rule 59 (empty -> .)
-
-    MAIS_IDENT                     shift and go to state 64
-    empty                          shift and go to state 66
-
-state 44
-
-    (2) METODO -> PUBLIC . STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-
-    STATIC          shift and go to state 67
-
-
-state 45
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO . RCBRA
-
-    RCBRA           shift and go to state 68
-
-
-state 46
-
-    (3) METODO -> empty .
-
-    RCBRA           reduce using rule 3 (METODO -> empty .)
-
-
-state 47
-
-    (19) MAIS_CMDS -> SEMICOLON CMDS .
-
-    RCBRA           reduce using rule 19 (MAIS_CMDS -> SEMICOLON CMDS .)
-    RETURN          reduce using rule 19 (MAIS_CMDS -> SEMICOLON CMDS .)
-
-
-state 48
-
-    (21) CMD -> IF LPAR CONDICAO . RPAR LCBRA CMDS RCBRA PFALSA
-
-    RPAR            shift and go to state 69
-
-
-state 49
-
-    (29) CONDICAO -> EXPRESSAO . IGUAL EXPRESSAO
-    (30) CONDICAO -> EXPRESSAO . MEN EXPRESSAO
-    (31) CONDICAO -> EXPRESSAO . MEN_IGUAL EXPRESSAO
-    (32) CONDICAO -> EXPRESSAO . MAI EXPRESSAO
-    (33) CONDICAO -> EXPRESSAO . MAI_IGUAL EXPRESSAO
-    (34) CONDICAO -> EXPRESSAO . DIF EXPRESSAO
-
-    IGUAL           shift and go to state 70
-    MEN             shift and go to state 71
-    MEN_IGUAL       shift and go to state 72
-    MAI             shift and go to state 73
-    MAI_IGUAL       shift and go to state 74
-    DIF             shift and go to state 75
-
-
-state 50
-
-    (35) CONDICAO -> NEG . EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 76
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 51
-
-    (44) EXPRESSAO -> TERMO . OUTROS_TERMOS
-    (51) OUTROS_TERMOS -> . OP_AD TERMO OUTROS_TERMOS
-    (52) OUTROS_TERMOS -> . empty
-    (53) OP_AD -> . SUM
-    (54) OP_AD -> . MENOS
-    (59) empty -> .
-
-    SUM             shift and go to state 57
-    MENOS           shift and go to state 58
-    IGUAL           reduce using rule 59 (empty -> .)
-    MEN             reduce using rule 59 (empty -> .)
-    MEN_IGUAL       reduce using rule 59 (empty -> .)
-    MAI             reduce using rule 59 (empty -> .)
-    MAI_IGUAL       reduce using rule 59 (empty -> .)
-    DIF             reduce using rule 59 (empty -> .)
-    RPAR            reduce using rule 59 (empty -> .)
-    SEMICOLON       reduce using rule 59 (empty -> .)
-
-    OUTROS_TERMOS                  shift and go to state 54
-    OP_AD                          shift and go to state 55
-    empty                          shift and go to state 56
-
-state 52
-
-    (22) CMD -> WHILE LPAR CONDICAO . RPAR LCBRA CMDS RCBRA
-
-    RPAR            shift and go to state 77
-
-
-state 53
-
-    (23) CMD -> PRINT LPAR EXPRESSAO . RPAR
-
-    RPAR            shift and go to state 78
-
-
-state 54
-
-    (44) EXPRESSAO -> TERMO OUTROS_TERMOS .
-
-    SEMICOLON       reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    RCBRA           reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    RETURN          reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    IGUAL           reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    MEN             reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    MEN_IGUAL       reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    MAI             reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    MAI_IGUAL       reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    DIF             reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-    RPAR            reduce using rule 44 (EXPRESSAO -> TERMO OUTROS_TERMOS .)
-
-
-state 55
-
-    (51) OUTROS_TERMOS -> OP_AD . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    TERMO                          shift and go to state 79
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 56
-
-    (52) OUTROS_TERMOS -> empty .
-
-    SEMICOLON       reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    RCBRA           reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    RETURN          reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    IGUAL           reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    MEN             reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    MEN_IGUAL       reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    MAI             reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    MAI_IGUAL       reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    DIF             reduce using rule 52 (OUTROS_TERMOS -> empty .)
-    RPAR            reduce using rule 52 (OUTROS_TERMOS -> empty .)
-
-
-state 57
-
-    (53) OP_AD -> SUM .
-
-    MENOS           reduce using rule 53 (OP_AD -> SUM .)
-    ID              reduce using rule 53 (OP_AD -> SUM .)
-    DOUBLE          reduce using rule 53 (OP_AD -> SUM .)
-    LPAR            reduce using rule 53 (OP_AD -> SUM .)
-
-
-state 58
-
-    (54) OP_AD -> MENOS .
-
-    MENOS           reduce using rule 54 (OP_AD -> MENOS .)
-    ID              reduce using rule 54 (OP_AD -> MENOS .)
-    DOUBLE          reduce using rule 54 (OP_AD -> MENOS .)
-    LPAR            reduce using rule 54 (OP_AD -> MENOS .)
-
-
-state 59
-
-    (45) TERMO -> OP_UN FATOR . MAIS_FATORES
-    (55) MAIS_FATORES -> . OP_MUL FATOR MAIS_FATORES
-    (56) MAIS_FATORES -> . empty
-    (57) OP_MUL -> . MUL
-    (58) OP_MUL -> . DIVI
-    (59) empty -> .
-
-    MUL             shift and go to state 83
-    DIVI            shift and go to state 84
-    SUM             reduce using rule 59 (empty -> .)
-    MENOS           reduce using rule 59 (empty -> .)
-    SEMICOLON       reduce using rule 59 (empty -> .)
-    RCBRA           reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-    IGUAL           reduce using rule 59 (empty -> .)
-    MEN             reduce using rule 59 (empty -> .)
-    MEN_IGUAL       reduce using rule 59 (empty -> .)
-    MAI             reduce using rule 59 (empty -> .)
-    MAI_IGUAL       reduce using rule 59 (empty -> .)
-    DIF             reduce using rule 59 (empty -> .)
-    RPAR            reduce using rule 59 (empty -> .)
-
-    MAIS_FATORES                   shift and go to state 80
-    OP_MUL                         shift and go to state 81
-    empty                          shift and go to state 82
-
-state 60
-
-    (48) FATOR -> ID .
-
-    MUL             reduce using rule 48 (FATOR -> ID .)
-    DIVI            reduce using rule 48 (FATOR -> ID .)
-    SUM             reduce using rule 48 (FATOR -> ID .)
-    MENOS           reduce using rule 48 (FATOR -> ID .)
-    SEMICOLON       reduce using rule 48 (FATOR -> ID .)
-    RCBRA           reduce using rule 48 (FATOR -> ID .)
-    RETURN          reduce using rule 48 (FATOR -> ID .)
-    IGUAL           reduce using rule 48 (FATOR -> ID .)
-    MEN             reduce using rule 48 (FATOR -> ID .)
-    MEN_IGUAL       reduce using rule 48 (FATOR -> ID .)
-    MAI             reduce using rule 48 (FATOR -> ID .)
-    MAI_IGUAL       reduce using rule 48 (FATOR -> ID .)
-    DIF             reduce using rule 48 (FATOR -> ID .)
-    RPAR            reduce using rule 48 (FATOR -> ID .)
-
-
-state 61
-
-    (49) FATOR -> DOUBLE .
-
-    MUL             reduce using rule 49 (FATOR -> DOUBLE .)
-    DIVI            reduce using rule 49 (FATOR -> DOUBLE .)
-    SUM             reduce using rule 49 (FATOR -> DOUBLE .)
-    MENOS           reduce using rule 49 (FATOR -> DOUBLE .)
-    SEMICOLON       reduce using rule 49 (FATOR -> DOUBLE .)
-    RCBRA           reduce using rule 49 (FATOR -> DOUBLE .)
-    RETURN          reduce using rule 49 (FATOR -> DOUBLE .)
-    IGUAL           reduce using rule 49 (FATOR -> DOUBLE .)
-    MEN             reduce using rule 49 (FATOR -> DOUBLE .)
-    MEN_IGUAL       reduce using rule 49 (FATOR -> DOUBLE .)
-    MAI             reduce using rule 49 (FATOR -> DOUBLE .)
-    MAI_IGUAL       reduce using rule 49 (FATOR -> DOUBLE .)
-    DIF             reduce using rule 49 (FATOR -> DOUBLE .)
-    RPAR            reduce using rule 49 (FATOR -> DOUBLE .)
-
-
-state 62
-
-    (50) FATOR -> LPAR . EXPRESSAO RPAR
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 85
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 63
-
-    (28) RESTO_IDENT -> LPAR LISTA_ARG RPAR .
-
-    SEMICOLON       reduce using rule 28 (RESTO_IDENT -> LPAR LISTA_ARG RPAR .)
-    RCBRA           reduce using rule 28 (RESTO_IDENT -> LPAR LISTA_ARG RPAR .)
-    RETURN          reduce using rule 28 (RESTO_IDENT -> LPAR LISTA_ARG RPAR .)
-
-
-state 64
-
-    (38) ARGUMENTOS -> ID MAIS_IDENT .
-
-    RPAR            reduce using rule 38 (ARGUMENTOS -> ID MAIS_IDENT .)
-
-
-state 65
-
-    (40) MAIS_IDENT -> VIRGU . ARGUMENTOS
-    (38) ARGUMENTOS -> . ID MAIS_IDENT
-    (39) ARGUMENTOS -> . empty
-    (59) empty -> .
-
-    ID              shift and go to state 43
-    RPAR            reduce using rule 59 (empty -> .)
-
-    ARGUMENTOS                     shift and go to state 86
-    empty                          shift and go to state 87
-
-state 66
-
-    (41) MAIS_IDENT -> empty .
-
-    RPAR            reduce using rule 41 (MAIS_IDENT -> empty .)
-
-
-state 67
-
-    (2) METODO -> PUBLIC STATIC . TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-    (16) TIPO -> . DOUBLE
-
-    DOUBLE          shift and go to state 89
-
-    TIPO                           shift and go to state 88
-
-state 68
-
-    (1) PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA .
-
-    $end            reduce using rule 1 (PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA .)
-
-
-state 69
-
-    (21) CMD -> IF LPAR CONDICAO RPAR . LCBRA CMDS RCBRA PFALSA
-
-    LCBRA           shift and go to state 90
-
-
-state 70
-
-    (29) CONDICAO -> EXPRESSAO IGUAL . EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 91
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 71
-
-    (30) CONDICAO -> EXPRESSAO MEN . EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 92
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 72
-
-    (31) CONDICAO -> EXPRESSAO MEN_IGUAL . EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 93
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 73
-
-    (32) CONDICAO -> EXPRESSAO MAI . EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 94
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 74
-
-    (33) CONDICAO -> EXPRESSAO MAI_IGUAL . EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 95
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 75
-
-    (34) CONDICAO -> EXPRESSAO DIF . EXPRESSAO
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 96
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 76
-
-    (35) CONDICAO -> NEG EXPRESSAO .
-
-    RPAR            reduce using rule 35 (CONDICAO -> NEG EXPRESSAO .)
-
-
-state 77
-
-    (22) CMD -> WHILE LPAR CONDICAO RPAR . LCBRA CMDS RCBRA
-
-    LCBRA           shift and go to state 97
-
-
-state 78
-
-    (23) CMD -> PRINT LPAR EXPRESSAO RPAR .
-
-    SEMICOLON       reduce using rule 23 (CMD -> PRINT LPAR EXPRESSAO RPAR .)
-    RCBRA           reduce using rule 23 (CMD -> PRINT LPAR EXPRESSAO RPAR .)
-    RETURN          reduce using rule 23 (CMD -> PRINT LPAR EXPRESSAO RPAR .)
-
-
-state 79
-
-    (51) OUTROS_TERMOS -> OP_AD TERMO . OUTROS_TERMOS
-    (51) OUTROS_TERMOS -> . OP_AD TERMO OUTROS_TERMOS
-    (52) OUTROS_TERMOS -> . empty
-    (53) OP_AD -> . SUM
-    (54) OP_AD -> . MENOS
-    (59) empty -> .
-
-    SUM             shift and go to state 57
-    MENOS           shift and go to state 58
-    SEMICOLON       reduce using rule 59 (empty -> .)
-    RCBRA           reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-    IGUAL           reduce using rule 59 (empty -> .)
-    MEN             reduce using rule 59 (empty -> .)
-    MEN_IGUAL       reduce using rule 59 (empty -> .)
-    MAI             reduce using rule 59 (empty -> .)
-    MAI_IGUAL       reduce using rule 59 (empty -> .)
-    DIF             reduce using rule 59 (empty -> .)
-    RPAR            reduce using rule 59 (empty -> .)
-
-    OP_AD                          shift and go to state 55
-    OUTROS_TERMOS                  shift and go to state 98
-    empty                          shift and go to state 56
-
-state 80
-
-    (45) TERMO -> OP_UN FATOR MAIS_FATORES .
-
-    SUM             reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    MENOS           reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    SEMICOLON       reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    RCBRA           reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    RETURN          reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    IGUAL           reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    MEN             reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    MEN_IGUAL       reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    MAI             reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    MAI_IGUAL       reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    DIF             reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-    RPAR            reduce using rule 45 (TERMO -> OP_UN FATOR MAIS_FATORES .)
-
-
-state 81
-
-    (55) MAIS_FATORES -> OP_MUL . FATOR MAIS_FATORES
-    (48) FATOR -> . ID
-    (49) FATOR -> . DOUBLE
-    (50) FATOR -> . LPAR EXPRESSAO RPAR
-
-    ID              shift and go to state 60
-    DOUBLE          shift and go to state 61
-    LPAR            shift and go to state 62
-
-    FATOR                          shift and go to state 99
-
-state 82
-
-    (56) MAIS_FATORES -> empty .
-
-    SUM             reduce using rule 56 (MAIS_FATORES -> empty .)
-    MENOS           reduce using rule 56 (MAIS_FATORES -> empty .)
-    SEMICOLON       reduce using rule 56 (MAIS_FATORES -> empty .)
-    RCBRA           reduce using rule 56 (MAIS_FATORES -> empty .)
-    RETURN          reduce using rule 56 (MAIS_FATORES -> empty .)
-    IGUAL           reduce using rule 56 (MAIS_FATORES -> empty .)
-    MEN             reduce using rule 56 (MAIS_FATORES -> empty .)
-    MEN_IGUAL       reduce using rule 56 (MAIS_FATORES -> empty .)
-    MAI             reduce using rule 56 (MAIS_FATORES -> empty .)
-    MAI_IGUAL       reduce using rule 56 (MAIS_FATORES -> empty .)
-    DIF             reduce using rule 56 (MAIS_FATORES -> empty .)
-    RPAR            reduce using rule 56 (MAIS_FATORES -> empty .)
-
-
-state 83
-
-    (57) OP_MUL -> MUL .
-
-    ID              reduce using rule 57 (OP_MUL -> MUL .)
-    DOUBLE          reduce using rule 57 (OP_MUL -> MUL .)
-    LPAR            reduce using rule 57 (OP_MUL -> MUL .)
-
-
-state 84
-
-    (58) OP_MUL -> DIVI .
-
-    ID              reduce using rule 58 (OP_MUL -> DIVI .)
-    DOUBLE          reduce using rule 58 (OP_MUL -> DIVI .)
-    LPAR            reduce using rule 58 (OP_MUL -> DIVI .)
-
-
-state 85
-
-    (50) FATOR -> LPAR EXPRESSAO . RPAR
-
-    RPAR            shift and go to state 100
-
-
-state 86
-
-    (40) MAIS_IDENT -> VIRGU ARGUMENTOS .
-
-    RPAR            reduce using rule 40 (MAIS_IDENT -> VIRGU ARGUMENTOS .)
-
-
-state 87
-
-    (39) ARGUMENTOS -> empty .
-
-    RPAR            reduce using rule 39 (ARGUMENTOS -> empty .)
-
-
-state 88
-
-    (2) METODO -> PUBLIC STATIC TIPO . ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-
-    ID              shift and go to state 101
-
-
-state 89
-
-    (16) TIPO -> DOUBLE .
-
-    ID              reduce using rule 16 (TIPO -> DOUBLE .)
-
-
-state 90
-
-    (21) CMD -> IF LPAR CONDICAO RPAR LCBRA . CMDS RCBRA PFALSA
-    (17) CMDS -> . CMD MAIS_CMDS
-    (18) CMDS -> . empty
-    (21) CMD -> . IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-    (22) CMD -> . WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-    (23) CMD -> . PRINT LPAR EXPRESSAO RPAR
-    (24) CMD -> . ID RESTO_IDENT
-    (59) empty -> .
-
-    IF              shift and go to state 21
-    WHILE           shift and go to state 22
-    PRINT           shift and go to state 23
-    ID              shift and go to state 17
-    RCBRA           reduce using rule 59 (empty -> .)
-
-    CMDS                           shift and go to state 102
-    CMD                            shift and go to state 19
-    empty                          shift and go to state 20
-
-state 91
-
-    (29) CONDICAO -> EXPRESSAO IGUAL EXPRESSAO .
-
-    RPAR            reduce using rule 29 (CONDICAO -> EXPRESSAO IGUAL EXPRESSAO .)
-
-
-state 92
-
-    (30) CONDICAO -> EXPRESSAO MEN EXPRESSAO .
-
-    RPAR            reduce using rule 30 (CONDICAO -> EXPRESSAO MEN EXPRESSAO .)
-
-
-state 93
-
-    (31) CONDICAO -> EXPRESSAO MEN_IGUAL EXPRESSAO .
-
-    RPAR            reduce using rule 31 (CONDICAO -> EXPRESSAO MEN_IGUAL EXPRESSAO .)
-
-
-state 94
-
-    (32) CONDICAO -> EXPRESSAO MAI EXPRESSAO .
-
-    RPAR            reduce using rule 32 (CONDICAO -> EXPRESSAO MAI EXPRESSAO .)
-
-
-state 95
-
-    (33) CONDICAO -> EXPRESSAO MAI_IGUAL EXPRESSAO .
-
-    RPAR            reduce using rule 33 (CONDICAO -> EXPRESSAO MAI_IGUAL EXPRESSAO .)
-
-
-state 96
-
-    (34) CONDICAO -> EXPRESSAO DIF EXPRESSAO .
-
-    RPAR            reduce using rule 34 (CONDICAO -> EXPRESSAO DIF EXPRESSAO .)
-
-
-state 97
-
-    (22) CMD -> WHILE LPAR CONDICAO RPAR LCBRA . CMDS RCBRA
-    (17) CMDS -> . CMD MAIS_CMDS
-    (18) CMDS -> . empty
-    (21) CMD -> . IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-    (22) CMD -> . WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-    (23) CMD -> . PRINT LPAR EXPRESSAO RPAR
-    (24) CMD -> . ID RESTO_IDENT
-    (59) empty -> .
-
-    IF              shift and go to state 21
-    WHILE           shift and go to state 22
-    PRINT           shift and go to state 23
-    ID              shift and go to state 17
-    RCBRA           reduce using rule 59 (empty -> .)
-
-    CMDS                           shift and go to state 103
-    CMD                            shift and go to state 19
-    empty                          shift and go to state 20
-
-state 98
-
-    (51) OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .
-
-    SEMICOLON       reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    RCBRA           reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    RETURN          reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    IGUAL           reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    MEN             reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    MEN_IGUAL       reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    MAI             reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    MAI_IGUAL       reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    DIF             reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-    RPAR            reduce using rule 51 (OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS .)
-
-
-state 99
-
-    (55) MAIS_FATORES -> OP_MUL FATOR . MAIS_FATORES
-    (55) MAIS_FATORES -> . OP_MUL FATOR MAIS_FATORES
-    (56) MAIS_FATORES -> . empty
-    (57) OP_MUL -> . MUL
-    (58) OP_MUL -> . DIVI
-    (59) empty -> .
-
-    MUL             shift and go to state 83
-    DIVI            shift and go to state 84
-    SUM             reduce using rule 59 (empty -> .)
-    MENOS           reduce using rule 59 (empty -> .)
-    SEMICOLON       reduce using rule 59 (empty -> .)
-    RCBRA           reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-    IGUAL           reduce using rule 59 (empty -> .)
-    MEN             reduce using rule 59 (empty -> .)
-    MEN_IGUAL       reduce using rule 59 (empty -> .)
-    MAI             reduce using rule 59 (empty -> .)
-    MAI_IGUAL       reduce using rule 59 (empty -> .)
-    DIF             reduce using rule 59 (empty -> .)
-    RPAR            reduce using rule 59 (empty -> .)
-
-    OP_MUL                         shift and go to state 81
-    MAIS_FATORES                   shift and go to state 104
-    empty                          shift and go to state 82
-
-state 100
-
-    (50) FATOR -> LPAR EXPRESSAO RPAR .
-
-    MUL             reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    DIVI            reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    SUM             reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    MENOS           reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    SEMICOLON       reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    RCBRA           reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    RETURN          reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    IGUAL           reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    MEN             reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    MEN_IGUAL       reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    MAI             reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    MAI_IGUAL       reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    DIF             reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-    RPAR            reduce using rule 50 (FATOR -> LPAR EXPRESSAO RPAR .)
-
-
-state 101
-
-    (2) METODO -> PUBLIC STATIC TIPO ID . LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-
-    LPAR            shift and go to state 105
-
-
-state 102
-
-    (21) CMD -> IF LPAR CONDICAO RPAR LCBRA CMDS . RCBRA PFALSA
-
-    RCBRA           shift and go to state 106
-
-
-state 103
-
-    (22) CMD -> WHILE LPAR CONDICAO RPAR LCBRA CMDS . RCBRA
-
-    RCBRA           shift and go to state 107
-
-
-state 104
-
-    (55) MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .
-
-    SUM             reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    MENOS           reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    SEMICOLON       reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    RCBRA           reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    RETURN          reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    IGUAL           reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    MEN             reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    MEN_IGUAL       reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    MAI             reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    MAI_IGUAL       reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    DIF             reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-    RPAR            reduce using rule 55 (MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES .)
-
-
-state 105
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR . PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-    (4) PARAMS -> . TIPO ID MAIS_PARAMS
-    (5) PARAMS -> . empty
-    (16) TIPO -> . DOUBLE
-    (59) empty -> .
-
-    DOUBLE          shift and go to state 89
-    RPAR            reduce using rule 59 (empty -> .)
-
-    TIPO                           shift and go to state 108
-    PARAMS                         shift and go to state 109
-    empty                          shift and go to state 110
-
-state 106
-
-    (21) CMD -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA . PFALSA
-    (25) PFALSA -> . ELSE LCBRA CMDS RCBRA
-    (26) PFALSA -> . empty
-    (59) empty -> .
-
-    ELSE            shift and go to state 112
-    SEMICOLON       reduce using rule 59 (empty -> .)
-    RCBRA           reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-
-    PFALSA                         shift and go to state 111
-    empty                          shift and go to state 113
-
-state 107
-
-    (22) CMD -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA .
-
-    SEMICOLON       reduce using rule 22 (CMD -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA .)
-    RCBRA           reduce using rule 22 (CMD -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA .)
-    RETURN          reduce using rule 22 (CMD -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA .)
-
-
-state 108
-
-    (4) PARAMS -> TIPO . ID MAIS_PARAMS
-
-    ID              shift and go to state 114
-
-
-state 109
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS . RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-
-    RPAR            shift and go to state 115
-
-
-state 110
-
-    (5) PARAMS -> empty .
-
-    RPAR            reduce using rule 5 (PARAMS -> empty .)
-
-
-state 111
-
-    (21) CMD -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA .
-
-    SEMICOLON       reduce using rule 21 (CMD -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA .)
-    RCBRA           reduce using rule 21 (CMD -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA .)
-    RETURN          reduce using rule 21 (CMD -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA .)
-
-
-state 112
-
-    (25) PFALSA -> ELSE . LCBRA CMDS RCBRA
-
-    LCBRA           shift and go to state 116
-
-
-state 113
-
-    (26) PFALSA -> empty .
-
-    SEMICOLON       reduce using rule 26 (PFALSA -> empty .)
-    RCBRA           reduce using rule 26 (PFALSA -> empty .)
-    RETURN          reduce using rule 26 (PFALSA -> empty .)
-
-
-state 114
-
-    (4) PARAMS -> TIPO ID . MAIS_PARAMS
-    (6) MAIS_PARAMS -> . VIRGU PARAMS
-    (7) MAIS_PARAMS -> . empty
-    (59) empty -> .
-
-    VIRGU           shift and go to state 118
-    RPAR            reduce using rule 59 (empty -> .)
-
-    MAIS_PARAMS                    shift and go to state 117
-    empty                          shift and go to state 119
-
-state 115
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR . LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-
-    LCBRA           shift and go to state 120
-
-
-state 116
-
-    (25) PFALSA -> ELSE LCBRA . CMDS RCBRA
-    (17) CMDS -> . CMD MAIS_CMDS
-    (18) CMDS -> . empty
-    (21) CMD -> . IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-    (22) CMD -> . WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-    (23) CMD -> . PRINT LPAR EXPRESSAO RPAR
-    (24) CMD -> . ID RESTO_IDENT
-    (59) empty -> .
-
-    IF              shift and go to state 21
-    WHILE           shift and go to state 22
-    PRINT           shift and go to state 23
-    ID              shift and go to state 17
-    RCBRA           reduce using rule 59 (empty -> .)
-
-    CMDS                           shift and go to state 121
-    CMD                            shift and go to state 19
-    empty                          shift and go to state 20
-
-state 117
-
-    (4) PARAMS -> TIPO ID MAIS_PARAMS .
-
-    RPAR            reduce using rule 4 (PARAMS -> TIPO ID MAIS_PARAMS .)
-
-
-state 118
-
-    (6) MAIS_PARAMS -> VIRGU . PARAMS
-    (4) PARAMS -> . TIPO ID MAIS_PARAMS
-    (5) PARAMS -> . empty
-    (16) TIPO -> . DOUBLE
-    (59) empty -> .
-
-    DOUBLE          shift and go to state 89
-    RPAR            reduce using rule 59 (empty -> .)
-
-    PARAMS                         shift and go to state 122
-    TIPO                           shift and go to state 108
-    empty                          shift and go to state 110
-
-state 119
-
-    (7) MAIS_PARAMS -> empty .
-
-    RPAR            reduce using rule 7 (MAIS_PARAMS -> empty .)
-
-
-state 120
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA . DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-    (8) DC -> . VAR MAIS_DC
-    (9) DC -> . empty
-    (12) VAR -> . TIPO VARS SEMICOLON
-    (59) empty -> .
-    (16) TIPO -> . DOUBLE
-
-    IF              reduce using rule 59 (empty -> .)
-    WHILE           reduce using rule 59 (empty -> .)
-    PRINT           reduce using rule 59 (empty -> .)
-    ID              reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-    DOUBLE          shift and go to state 89
-
-    TIPO                           shift and go to state 123
-    DC                             shift and go to state 124
-    VAR                            shift and go to state 125
-    empty                          shift and go to state 126
-
-state 121
-
-    (25) PFALSA -> ELSE LCBRA CMDS . RCBRA
-
-    RCBRA           shift and go to state 127
-
-
-state 122
-
-    (6) MAIS_PARAMS -> VIRGU PARAMS .
-
-    RPAR            reduce using rule 6 (MAIS_PARAMS -> VIRGU PARAMS .)
-
-
-state 123
-
-    (12) VAR -> TIPO . VARS SEMICOLON
-    (13) VARS -> . ID MAIS_VAR
-
-    ID              shift and go to state 129
-
-    VARS                           shift and go to state 128
-
-state 124
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC . CMDS RETURN EXPRESSAO SEMICOLON RCBRA
-    (17) CMDS -> . CMD MAIS_CMDS
-    (18) CMDS -> . empty
-    (21) CMD -> . IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-    (22) CMD -> . WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-    (23) CMD -> . PRINT LPAR EXPRESSAO RPAR
-    (24) CMD -> . ID RESTO_IDENT
-    (59) empty -> .
-
-    IF              shift and go to state 21
-    WHILE           shift and go to state 22
-    PRINT           shift and go to state 23
-    ID              shift and go to state 17
-    RETURN          reduce using rule 59 (empty -> .)
-
-    CMDS                           shift and go to state 130
-    CMD                            shift and go to state 19
-    empty                          shift and go to state 20
-
-state 125
-
-    (8) DC -> VAR . MAIS_DC
-    (10) MAIS_DC -> . SEMICOLON DC
-    (11) MAIS_DC -> . empty
-    (59) empty -> .
-
-    SEMICOLON       shift and go to state 132
-    IF              reduce using rule 59 (empty -> .)
-    WHILE           reduce using rule 59 (empty -> .)
-    PRINT           reduce using rule 59 (empty -> .)
-    ID              reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-
-    MAIS_DC                        shift and go to state 131
-    empty                          shift and go to state 133
-
-state 126
-
-    (9) DC -> empty .
-
-    IF              reduce using rule 9 (DC -> empty .)
-    WHILE           reduce using rule 9 (DC -> empty .)
-    PRINT           reduce using rule 9 (DC -> empty .)
-    ID              reduce using rule 9 (DC -> empty .)
-    RETURN          reduce using rule 9 (DC -> empty .)
-
-
-state 127
-
-    (25) PFALSA -> ELSE LCBRA CMDS RCBRA .
-
-    SEMICOLON       reduce using rule 25 (PFALSA -> ELSE LCBRA CMDS RCBRA .)
-    RCBRA           reduce using rule 25 (PFALSA -> ELSE LCBRA CMDS RCBRA .)
-    RETURN          reduce using rule 25 (PFALSA -> ELSE LCBRA CMDS RCBRA .)
-
-
-state 128
-
-    (12) VAR -> TIPO VARS . SEMICOLON
-
-    SEMICOLON       shift and go to state 134
-
-
-state 129
-
-    (13) VARS -> ID . MAIS_VAR
-    (14) MAIS_VAR -> . VIRGU VARS
-    (15) MAIS_VAR -> . empty
-    (59) empty -> .
-
-    VIRGU           shift and go to state 136
-    SEMICOLON       reduce using rule 59 (empty -> .)
-
-    MAIS_VAR                       shift and go to state 135
-    empty                          shift and go to state 137
-
-state 130
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS . RETURN EXPRESSAO SEMICOLON RCBRA
-
-    RETURN          shift and go to state 138
-
-
-state 131
-
-    (8) DC -> VAR MAIS_DC .
-
-    IF              reduce using rule 8 (DC -> VAR MAIS_DC .)
-    WHILE           reduce using rule 8 (DC -> VAR MAIS_DC .)
-    PRINT           reduce using rule 8 (DC -> VAR MAIS_DC .)
-    ID              reduce using rule 8 (DC -> VAR MAIS_DC .)
-    RETURN          reduce using rule 8 (DC -> VAR MAIS_DC .)
-
-
-state 132
-
-    (10) MAIS_DC -> SEMICOLON . DC
-    (8) DC -> . VAR MAIS_DC
-    (9) DC -> . empty
-    (12) VAR -> . TIPO VARS SEMICOLON
-    (59) empty -> .
-    (16) TIPO -> . DOUBLE
-
-    IF              reduce using rule 59 (empty -> .)
-    WHILE           reduce using rule 59 (empty -> .)
-    PRINT           reduce using rule 59 (empty -> .)
-    ID              reduce using rule 59 (empty -> .)
-    RETURN          reduce using rule 59 (empty -> .)
-    DOUBLE          shift and go to state 89
-
-    DC                             shift and go to state 139
-    VAR                            shift and go to state 125
-    empty                          shift and go to state 126
-    TIPO                           shift and go to state 123
-
-state 133
-
-    (11) MAIS_DC -> empty .
-
-    IF              reduce using rule 11 (MAIS_DC -> empty .)
-    WHILE           reduce using rule 11 (MAIS_DC -> empty .)
-    PRINT           reduce using rule 11 (MAIS_DC -> empty .)
-    ID              reduce using rule 11 (MAIS_DC -> empty .)
-    RETURN          reduce using rule 11 (MAIS_DC -> empty .)
-
-
-state 134
-
-    (12) VAR -> TIPO VARS SEMICOLON .
-
-    SEMICOLON       reduce using rule 12 (VAR -> TIPO VARS SEMICOLON .)
-    IF              reduce using rule 12 (VAR -> TIPO VARS SEMICOLON .)
-    WHILE           reduce using rule 12 (VAR -> TIPO VARS SEMICOLON .)
-    PRINT           reduce using rule 12 (VAR -> TIPO VARS SEMICOLON .)
-    ID              reduce using rule 12 (VAR -> TIPO VARS SEMICOLON .)
-    RETURN          reduce using rule 12 (VAR -> TIPO VARS SEMICOLON .)
-
-
-state 135
-
-    (13) VARS -> ID MAIS_VAR .
-
-    SEMICOLON       reduce using rule 13 (VARS -> ID MAIS_VAR .)
-
-
-state 136
-
-    (14) MAIS_VAR -> VIRGU . VARS
-    (13) VARS -> . ID MAIS_VAR
-
-    ID              shift and go to state 129
-
-    VARS                           shift and go to state 140
-
-state 137
-
-    (15) MAIS_VAR -> empty .
-
-    SEMICOLON       reduce using rule 15 (MAIS_VAR -> empty .)
-
-
-state 138
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN . EXPRESSAO SEMICOLON RCBRA
-    (44) EXPRESSAO -> . TERMO OUTROS_TERMOS
-    (45) TERMO -> . OP_UN FATOR MAIS_FATORES
-    (46) OP_UN -> . MENOS
-    (47) OP_UN -> . empty
-    (59) empty -> .
-
-    MENOS           shift and go to state 38
-    ID              reduce using rule 59 (empty -> .)
-    DOUBLE          reduce using rule 59 (empty -> .)
-    LPAR            reduce using rule 59 (empty -> .)
-
-    EXPRESSAO                      shift and go to state 141
-    TERMO                          shift and go to state 51
-    OP_UN                          shift and go to state 37
-    empty                          shift and go to state 39
-
-state 139
-
-    (10) MAIS_DC -> SEMICOLON DC .
-
-    IF              reduce using rule 10 (MAIS_DC -> SEMICOLON DC .)
-    WHILE           reduce using rule 10 (MAIS_DC -> SEMICOLON DC .)
-    PRINT           reduce using rule 10 (MAIS_DC -> SEMICOLON DC .)
-    ID              reduce using rule 10 (MAIS_DC -> SEMICOLON DC .)
-    RETURN          reduce using rule 10 (MAIS_DC -> SEMICOLON DC .)
-
-
-state 140
-
-    (14) MAIS_VAR -> VIRGU VARS .
-
-    SEMICOLON       reduce using rule 14 (MAIS_VAR -> VIRGU VARS .)
-
-
-state 141
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO . SEMICOLON RCBRA
-
-    SEMICOLON       shift and go to state 142
-
-
-state 142
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON . RCBRA
-
-    RCBRA           shift and go to state 143
-
-
-state 143
-
-    (2) METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA .
-
-    RCBRA           reduce using rule 2 (METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA .)
-
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: reduce/reduce conflict in state 36 resolved using rule (EXP_IDENT -> TERMO)
-WARNING: rejected rule (empty -> <empty>) in state 36
-WARNING: reduce/reduce conflict in state 42 resolved using rule (LISTA_ARG -> empty)
-WARNING: rejected rule (ARGUMENTOS -> empty) in state 42

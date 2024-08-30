@@ -116,18 +116,20 @@ class myLexer(object):
     
     def test(self, data):
         self.lexer.input(data)
+        tokens = []
+        while True:
+            tok = self.lexer.token()
+            if not tok:
+                break
+            tokens.append(str(tok))
+        
         with open('tokens.txt', 'w') as f:
-            while True:
-                tok = self.lexer.token()
-                if not tok:
-                    break
-                print(tok)
-                f.write(f"{tok}\n")
+            f.write("\n".join(tokens))
             
 m = myLexer()
 m.build()
 m.test(
-    """
+    '''
     public class Teste {
         public static void main(String[] args) {
             somar();
@@ -139,7 +141,7 @@ m.test(
             while(cont > 0) {
                 a = lerDouble();
                 b = lerDouble();
-                if (a > b) {
+                if (a > b){
                     c = a - b;
                 } else {
                     c = b - a;
@@ -150,7 +152,7 @@ m.test(
             return c;
         }
     }
-    """
+    '''
 )
 
 
