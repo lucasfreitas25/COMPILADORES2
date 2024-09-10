@@ -9,13 +9,11 @@ Unused terminals:
     DEF
     DIF
     DIVI
+    DOUBLE
     EXTENDS
     FALSE
     IGUAL
-    INT
-    LCBRA
-    LPAR
-    LSBRA
+    LENGTH
     MAI
     MAI_IGUAL
     MEN
@@ -25,79 +23,40 @@ Unused terminals:
     NEG
     NEW
     NULL
-    NUMBER
     POINT
-    PRINT
-    RCBRA
-    RPAR
-    RSBRA
     SUM
     THIS
     TRUE
-    VIRGU
-    length
 
 Grammar
 
 Rule 0     S' -> PROG
-Rule 1     PROG -> PUBLIC CLASS ID LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN LBRACE CMDS RBRACE METODO RBRACE
-Rule 2     METODO -> PUBLIC STATIC TIPO ID LPAREN PARAMS RPAREN LBRACE DC CMDS RETURN EXPRESSAO SEMICOLON RBRACE
+Rule 1     PROG -> PUBLIC CLASS ID LCBRA PUBLIC STATIC VOID MAIN LPAR STRING LSBRA RSBRA ID RPAR LCBRA CMDS RCBRA METODO RCBRA
+Rule 2     METODO -> PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA CMDS RETURN EXPRESSAO SEMICOLON RCBRA
 Rule 3     METODO -> empty
 Rule 4     PARAMS -> TIPO ID MAIS_PARAMS
 Rule 5     PARAMS -> empty
-Rule 6     MAIS_PARAMS -> COMMA PARAMS
+Rule 6     MAIS_PARAMS -> VIRGU PARAMS
 Rule 7     MAIS_PARAMS -> empty
-Rule 8     DC -> VAR MAIS_DC
-Rule 9     DC -> empty
-Rule 10    MAIS_DC -> SEMICOLON DC
-Rule 11    MAIS_DC -> empty
-Rule 12    VAR -> TIPO VARS
-Rule 13    VARS -> ID MAIS_VAR
-Rule 14    MAIS_VAR -> COMMA VARS
-Rule 15    MAIS_VAR -> empty
-Rule 16    TIPO -> DOUBLE
-Rule 17    CMDS -> CMD MAIS_CMDS
-Rule 18    CMDS -> empty
-Rule 19    MAIS_CMDS -> SEMICOLON CMDS
-Rule 20    MAIS_CMDS -> empty
-Rule 21    CMD -> IF LPAREN CONDICAO RPAREN LBRACE CMDS RBRACE PFALSA
-Rule 22    CMD -> WHILE LPAREN CONDICAO RPAREN LBRACE CMDS RBRACE
-Rule 23    CMD -> PRINTLN LPAREN EXPRESSAO RPAREN
-Rule 24    CMD -> ID RESTO_IDENT
-Rule 25    PFALSA -> ELSE LBRACE CMDS RBRACE
-Rule 26    PFALSA -> empty
-Rule 27    RESTO_IDENT -> ASSIGN EXP_IDENT
-Rule 28    RESTO_IDENT -> LPAREN LISTA_ARG RPAREN
-Rule 29    LISTA_ARG -> ARGUMENTOS
-Rule 30    LISTA_ARG -> empty
-Rule 31    ARGUMENTOS -> ID MAIS_IDENT
-Rule 32    MAIS_IDENT -> COMMA ARGUMENTOS
-Rule 33    MAIS_IDENT -> empty
-Rule 34    EXP_IDENT -> EXPRESSAO
-Rule 35    EXP_IDENT -> LERDOUBLE LPAREN RPAREN
-Rule 36    CONDICAO -> EXPRESSAO RELACAO EXPRESSAO
-Rule 37    RELACAO -> EQ
-Rule 38    RELACAO -> NEQ
-Rule 39    RELACAO -> GEQ
-Rule 40    RELACAO -> LEQ
-Rule 41    RELACAO -> GT
-Rule 42    RELACAO -> LT
-Rule 43    EXPRESSAO -> TERMO OUTROS_TERMOS
-Rule 44    TERMO -> OP_UN FATOR MAIS_FATORES
-Rule 45    OP_UN -> MINUS
-Rule 46    OP_UN -> empty
-Rule 47    FATOR -> ID
-Rule 48    FATOR -> NUMERO_REAL
-Rule 49    FATOR -> LPAREN EXPRESSAO RPAREN
-Rule 50    OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS
-Rule 51    OUTROS_TERMOS -> empty
-Rule 52    OP_AD -> PLUS
-Rule 53    OP_AD -> MINUS
-Rule 54    MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES
-Rule 55    MAIS_FATORES -> empty
-Rule 56    OP_MUL -> TIMES
-Rule 57    OP_MUL -> DIVIDE
-Rule 58    empty -> <empty>
+Rule 8     CMDS -> CMD MAIS_CMDS
+Rule 9     CMDS -> CMD_COND CMDS
+Rule 10    CMDS -> DC
+Rule 11    CMDS -> empty
+Rule 12    MAIS_CMDS -> SEMICOLON CMDS
+Rule 13    CMD_COND -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
+Rule 14    CMD_COND -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
+Rule 15    CMD -> PRINT LPAR EXPRESSAO RPAR
+Rule 16    CMD -> ID RESTO_IDENT
+Rule 17    PFALSA -> ELSE LCBRA CMDS RCBRA
+Rule 18    PFALSA -> empty
+Rule 19    CONDICAO -> EXPRESSAO RELACAO EXPRESSAO
+Rule 20    EXPRESSAO -> TERMO OUTROS_TERMOS
+Rule 21    TERMO -> OP_UN FATOR MAIS_FATORES
+Rule 22    TERMO -> FATOR MAIS_FATORES
+Rule 23    FATOR -> ID
+Rule 24    FATOR -> NUMBER
+Rule 25    FATOR -> LPAR EXPRESSAO RPAR
+Rule 26    empty -> <empty>
 
 Terminals, with rules where they appear
 
@@ -109,17 +68,17 @@ COLON                :
 DEF                  : 
 DIF                  : 
 DIVI                 : 
-DOUBLE               : 16
-ELSE                 : 25
+DOUBLE               : 
+ELSE                 : 17
 EXTENDS              : 
 FALSE                : 
-ID                   : 1 1 2 4 13 24 31 47
-IF                   : 21
+ID                   : 1 1 2 4 16 23
+IF                   : 13
 IGUAL                : 
-INT                  : 
-LCBRA                : 
-LPAR                 : 
-LSBRA                : 
+LCBRA                : 1 1 2 13 14 17
+LENGTH               : 
+LPAR                 : 1 2 13 14 15 25
+LSBRA                : 1
 MAI                  : 
 MAIN                 : 1
 MAI_IGUAL            : 
@@ -130,77 +89,46 @@ MUL                  :
 NEG                  : 
 NEW                  : 
 NULL                 : 
-NUMBER               : 
+NUMBER               : 24
 POINT                : 
-PRINT                : 
+PRINT                : 15
 PUBLIC               : 1 1 2
-RCBRA                : 
+RCBRA                : 1 1 2 13 14 17
 RETURN               : 2
-RPAR                 : 
-RSBRA                : 
-SEMICOLON            : 2 10 19
+RPAR                 : 1 2 13 14 15 25
+RSBRA                : 1
+SEMICOLON            : 2 12
 STATIC               : 1 2
 STRING               : 1
 SUM                  : 
 THIS                 : 
 TRUE                 : 
-VIRGU                : 
+VIRGU                : 6
 VOID                 : 1
-WHILE                : 22
+WHILE                : 14
 error                : 
-length               : 
 
 Nonterminals, with rules where they appear
 
-ARGUMENTOS           : 29 32
-ASSIGN               : 27
-CMD                  : 17
-CMDS                 : 1 2 19 21 22 25
-COMMA                : 6 14 32
-CONDICAO             : 21 22
-DC                   : 2 10
-DIVIDE               : 57
-EQ                   : 37
-EXPRESSAO            : 2 23 34 36 36 49
-EXP_IDENT            : 27
-FATOR                : 44 54
-GEQ                  : 39
-GT                   : 41
-LBRACE               : 1 1 2 21 22 25
-LBRACKET             : 1
-LEQ                  : 40
-LERDOUBLE            : 35
-LISTA_ARG            : 28
-LPAREN               : 1 2 21 22 23 28 35 49
-LT                   : 42
-MAIS_CMDS            : 17
-MAIS_DC              : 8
-MAIS_FATORES         : 44 54
-MAIS_IDENT           : 31
+CMD                  : 8
+CMDS                 : 1 2 9 12 13 14 17
+CMD_COND             : 9
+CONDICAO             : 13 14
+DC                   : 10
+EXPRESSAO            : 2 15 19 19 25
+FATOR                : 21 22
+MAIS_CMDS            : 8
+MAIS_FATORES         : 21 22
 MAIS_PARAMS          : 4
-MAIS_VAR             : 13
 METODO               : 1
-MINUS                : 45 53
-NEQ                  : 38
-NUMERO_REAL          : 48
-OP_AD                : 50
-OP_MUL               : 54
-OP_UN                : 44
-OUTROS_TERMOS        : 43 50
+OP_UN                : 21
+OUTROS_TERMOS        : 20
 PARAMS               : 2 6
-PFALSA               : 21
-PLUS                 : 52
-PRINTLN              : 23
+PFALSA               : 13
 PROG                 : 0
-RBRACE               : 1 1 2 21 22 25
-RBRACKET             : 1
-RELACAO              : 36
-RESTO_IDENT          : 24
-RPAREN               : 1 2 21 22 23 28 35 49
-TERMO                : 43 50
-TIMES                : 56
-TIPO                 : 2 4 12
-VAR                  : 8
-VARS                 : 12 14
-empty                : 3 5 7 9 11 15 18 20 26 30 33 46 51 55
+RELACAO              : 19
+RESTO_IDENT          : 16
+TERMO                : 20
+TIPO                 : 2 4
+empty                : 3 5 7 11 18
 

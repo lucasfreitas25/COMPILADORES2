@@ -129,8 +129,8 @@ class myLexer(object):
 m = myLexer()
 m.build()
 m.test(
-    '''
-    public class Teste {
+    """
+    public classe Teste {
         public static void main(String[] args) {
             somar();
         }
@@ -141,7 +141,7 @@ m.test(
             while(cont > 0) {
                 a = lerDouble();
                 b = lerDouble();
-                if (a > b){
+                if (a > b) {
                     c = a - b;
                 } else {
                     c = b - a;
@@ -151,8 +151,7 @@ m.test(
             }
             return c;
         }
-    }
-    '''
+    }"""
 )
 
 

@@ -46,7 +46,7 @@ def p_prog(p):
     p[0] = ("PROG", p[13], p[15], p[18])
 
 def p_metodo(p):
-    """METODO : PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA DC CMDS RETURN EXPRESSAO SEMICOLON RCBRA
+    """METODO : PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA CMDS RETURN EXPRESSAO SEMICOLON RCBRA
               | empty"""
     if len(p) == 14:
         p[0] = ("METODO", p[3], p[4], p[6], p[9], p[10], p[12])
@@ -72,7 +72,7 @@ def p_mais_params(p):
 
 def p_dc(p):
     """DC : VAR MAIS_DC
-          | empty"""
+          """
     if len(p) == 3:
         p[0] = (p[1], p[2])
     else:
@@ -111,6 +111,8 @@ def p_tipo(p):
 
 def p_cmds(p):
     """CMDS : CMD MAIS_CMDS
+            | CMD_COND CMDS
+            | DC
             | empty"""
     if len(p) == 3:
         p[0] = [p[1]] + (p[2] if p[2] else [])
@@ -119,22 +121,27 @@ def p_cmds(p):
 
 def p_mais_cmds(p):
     """MAIS_CMDS : SEMICOLON CMDS
-                 | empty"""
+                 """
     if len(p) == 3:
         p[0] = p[2]
     else:
         p[0] = []
 
-def p_cmd(p):
-    """CMD : IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
+def p_cmd_cond(p):
+    """CMD_COND : IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
            | WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-           | PRINT LPAR EXPRESSAO RPAR
-           | ID RESTO_IDENT"""
+           """
     if p[1] == 'if':
         p[0] = ("if", p[3], p[6], p[8])
     elif p[1] == 'while':
         p[0] = ("while", p[3], p[6])
-    elif p[1] == 'System.out.println':
+    else:
+        p[0] = ("assign_or_call", p[1], p[2])
+        
+def p_cmd(p):
+    """CMD : PRINT LPAR EXPRESSAO RPAR
+           | ID RESTO_IDENT"""
+    if p[1] == 'System.out.println':
         p[0] = ("println", p[3])
     else:
         p[0] = ("assign_or_call", p[1], p[2])
@@ -181,14 +188,15 @@ def p_condicao(p):
     
     
 def p_lista_arg(p):
-    """LISTA_ARG : ARGUMENTOS 
+    """LISTA_ARG : ARGUMENTOS
                  | empty"""
-    p[0] = p[1] if len(p) > 1 else []
-
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = None
 def p_argumentos(p):
-    """ARGUMENTOS : ID MAIS_IDENT 
-                  | empty"""
-    p[0] = [p[1]] + (p[2] if p[2] else [])
+    """ARGUMENTOS : ID MAIS_IDENT"""
+    p[0] = ("ARGUMENTOS", p[1], p[2])
     
 def p_mais_ident(p):
     """MAIS_IDENT : VIRGU ARGUMENTOS 
@@ -199,10 +207,6 @@ def p_exp_ident(p):
     """EXP_IDENT : EXPRESSAO
                  | TERMO"""
     p[0] = p[1]
-
-# def p_condicao(p):
-#     """CONDICAO : EXPRESSAO RELACAO EXPRESSAO"""
-#     pass
 
 def p_expressao(p):
     "EXPRESSAO : TERMO OUTROS_TERMOS"
@@ -261,15 +265,17 @@ def p_op_mul(p):
         p[0] = p[1] / p[3]
 
 def p_empty(p):
-    """empty :"""
+    """empty :
+            """
     pass
 
 
 def p_error(p):
     if p:
-        print(f"Erro de sintaxe em '{p.value}' na linha {p.lineno}")
+        print(f"Erro de sintaxe em '{p.value}' na linha {p.lineno}, tipo de token: {p.type}")
     else:
         print("Erro de sintaxe no final do arquivo (EOF)")
+
 
 
 parser = yacc.yacc()
@@ -277,7 +283,7 @@ parser = yacc.yacc()
 if __name__ == "__main__":
     try:
         with open("tokens.txt", "r") as f:
-            data = f.read()
+            data = f.read()            
             parser.parse(data)
             print("Análise concluída sem erros.")
     except Exception as e:
