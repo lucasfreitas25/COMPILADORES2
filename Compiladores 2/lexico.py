@@ -24,7 +24,8 @@ class myLexer(object):
         'this': 'THIS',
         'new': 'NEW',
         'null': 'NULL',
-        'double': 'DOUBLE'
+        'double': 'DOUBLE',
+        'lerDouble': 'LERDOUBLE'
 
     }
 
@@ -79,11 +80,16 @@ class myLexer(object):
     t_SEMICOLON = r'\;'
     t_LSBRA = r'\['
     t_RSBRA = r'\]'
-
+    
+    
+    
+    def t_PRINT(self, t):
+        r'System\.out\.println'
+        return t
     #IDENTIFICA AS PALAVRAS RESERVADAS
     def t_ID(self, t):
         r'[a-z_A-Z]+[0-9a-zA-Z]*'
-        t.type = self.reservada.get(t.value.lower(), 'ID')
+        t.type = self.reservada.get(t.value, 'ID')
         return t
 
     #IDENTIFICA OS NUMEROS
@@ -121,7 +127,8 @@ class myLexer(object):
             tok = self.lexer.token()
             if not tok:
                 break
-            tokens.append(str(tok))
+            # Gravar apenas o tipo do token, o valor, a linha e a posição separados por espaços
+            tokens.append(f'{tok.type} {tok.value} {tok.lineno} {tok.lexpos}')
         
         with open('tokens.txt', 'w') as f:
             f.write("\n".join(tokens))
@@ -130,7 +137,7 @@ m = myLexer()
 m.build()
 m.test(
     """
-    public classe Teste {
+    public class Teste {
         public static void main(String[] args) {
             somar();
         }
@@ -144,10 +151,11 @@ m.test(
                 if (a > b) {
                     c = a - b;
                 } else {
-                    c = b - a;
+                    c = b + a;
                 }
                 System.out.println(c);
                 cont = cont - 1;
+                
             }
             return c;
         }

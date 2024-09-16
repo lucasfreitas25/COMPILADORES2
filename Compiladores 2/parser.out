@@ -3,30 +3,18 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     AND
-    ASSIGMENT
     BOOLEAN
     COLON
     DEF
-    DIF
-    DIVI
-    DOUBLE
     EXTENDS
     FALSE
-    IGUAL
-    LENGTH
-    MAI
-    MAI_IGUAL
-    MEN
-    MENOS
-    MEN_IGUAL
-    MUL
-    NEG
+    INT
     NEW
     NULL
     POINT
-    SUM
     THIS
     TRUE
+    length
 
 Grammar
 
@@ -38,97 +26,135 @@ Rule 4     PARAMS -> TIPO ID MAIS_PARAMS
 Rule 5     PARAMS -> empty
 Rule 6     MAIS_PARAMS -> VIRGU PARAMS
 Rule 7     MAIS_PARAMS -> empty
-Rule 8     CMDS -> CMD MAIS_CMDS
-Rule 9     CMDS -> CMD_COND CMDS
-Rule 10    CMDS -> DC
-Rule 11    CMDS -> empty
-Rule 12    MAIS_CMDS -> SEMICOLON CMDS
-Rule 13    CMD_COND -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
-Rule 14    CMD_COND -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
-Rule 15    CMD -> PRINT LPAR EXPRESSAO RPAR
-Rule 16    CMD -> ID RESTO_IDENT
-Rule 17    PFALSA -> ELSE LCBRA CMDS RCBRA
-Rule 18    PFALSA -> empty
-Rule 19    CONDICAO -> EXPRESSAO RELACAO EXPRESSAO
-Rule 20    EXPRESSAO -> TERMO OUTROS_TERMOS
-Rule 21    TERMO -> OP_UN FATOR MAIS_FATORES
-Rule 22    TERMO -> FATOR MAIS_FATORES
-Rule 23    FATOR -> ID
-Rule 24    FATOR -> NUMBER
-Rule 25    FATOR -> LPAR EXPRESSAO RPAR
-Rule 26    empty -> <empty>
+Rule 8     DC -> VAR MAIS_CMDS
+Rule 9     VAR -> TIPO VARS
+Rule 10    VARS -> ID MAIS_VAR
+Rule 11    MAIS_VAR -> VIRGU VARS
+Rule 12    MAIS_VAR -> empty
+Rule 13    TIPO -> DOUBLE
+Rule 14    CMDS -> CMD MAIS_CMDS
+Rule 15    CMDS -> CMD_COND CMDS
+Rule 16    CMDS -> DC
+Rule 17    CMDS -> empty
+Rule 18    MAIS_CMDS -> SEMICOLON CMDS
+Rule 19    CMD_COND -> IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
+Rule 20    CMD_COND -> WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
+Rule 21    CMD -> PRINT LPAR EXPRESSAO RPAR
+Rule 22    CMD -> ID RESTO_IDENT
+Rule 23    PFALSA -> ELSE LCBRA CMDS RCBRA
+Rule 24    PFALSA -> empty
+Rule 25    RESTO_IDENT -> ASSIGMENT EXP_IDENT
+Rule 26    RESTO_IDENT -> LPAR LISTA_ARG RPAR
+Rule 27    CONDICAO -> EXPRESSAO IGUAL EXPRESSAO
+Rule 28    CONDICAO -> EXPRESSAO MEN EXPRESSAO
+Rule 29    CONDICAO -> EXPRESSAO MEN_IGUAL EXPRESSAO
+Rule 30    CONDICAO -> EXPRESSAO MAI EXPRESSAO
+Rule 31    CONDICAO -> EXPRESSAO MAI_IGUAL EXPRESSAO
+Rule 32    CONDICAO -> EXPRESSAO DIF EXPRESSAO
+Rule 33    CONDICAO -> NEG EXPRESSAO
+Rule 34    LISTA_ARG -> ARGUMENTOS
+Rule 35    LISTA_ARG -> empty
+Rule 36    ARGUMENTOS -> ID MAIS_IDENT
+Rule 37    MAIS_IDENT -> VIRGU ARGUMENTOS
+Rule 38    MAIS_IDENT -> empty
+Rule 39    EXP_IDENT -> EXPRESSAO
+Rule 40    EXP_IDENT -> LERDOUBLE LPAR RPAR
+Rule 41    EXPRESSAO -> TERMO OUTROS_TERMOS
+Rule 42    TERMO -> OP_UN FATOR MAIS_FATORES
+Rule 43    FATOR -> ID
+Rule 44    FATOR -> NUMBER
+Rule 45    FATOR -> LPAR EXPRESSAO RPAR
+Rule 46    OUTROS_TERMOS -> OP_AD TERMO OUTROS_TERMOS
+Rule 47    OUTROS_TERMOS -> empty
+Rule 48    OP_AD -> SUM
+Rule 49    OP_AD -> MENOS
+Rule 50    MAIS_FATORES -> OP_MUL FATOR MAIS_FATORES
+Rule 51    MAIS_FATORES -> empty
+Rule 52    OP_MUL -> MUL
+Rule 53    OP_MUL -> DIVI
+Rule 54    empty -> <empty>
 
 Terminals, with rules where they appear
 
 AND                  : 
-ASSIGMENT            : 
+ASSIGMENT            : 25
 BOOLEAN              : 
 CLASS                : 1
 COLON                : 
 DEF                  : 
-DIF                  : 
-DIVI                 : 
-DOUBLE               : 
-ELSE                 : 17
+DIF                  : 32
+DIVI                 : 53
+DOUBLE               : 13
+ELSE                 : 23
 EXTENDS              : 
 FALSE                : 
-ID                   : 1 1 2 4 16 23
-IF                   : 13
-IGUAL                : 
-LCBRA                : 1 1 2 13 14 17
-LENGTH               : 
-LPAR                 : 1 2 13 14 15 25
+ID                   : 1 1 2 4 10 22 36 43
+IF                   : 19
+IGUAL                : 27
+INT                  : 
+LCBRA                : 1 1 2 19 20 23
+LERDOUBLE            : 40
+LPAR                 : 1 2 19 20 21 26 40 45
 LSBRA                : 1
-MAI                  : 
+MAI                  : 30
 MAIN                 : 1
-MAI_IGUAL            : 
-MEN                  : 
-MENOS                : 
-MEN_IGUAL            : 
-MUL                  : 
-NEG                  : 
+MAI_IGUAL            : 31
+MEN                  : 28
+MENOS                : 49
+MEN_IGUAL            : 29
+MUL                  : 52
+NEG                  : 33
 NEW                  : 
 NULL                 : 
-NUMBER               : 24
+NUMBER               : 44
 POINT                : 
-PRINT                : 15
+PRINT                : 21
 PUBLIC               : 1 1 2
-RCBRA                : 1 1 2 13 14 17
+RCBRA                : 1 1 2 19 20 23
 RETURN               : 2
-RPAR                 : 1 2 13 14 15 25
+RPAR                 : 1 2 19 20 21 26 40 45
 RSBRA                : 1
-SEMICOLON            : 2 12
+SEMICOLON            : 2 18
 STATIC               : 1 2
 STRING               : 1
-SUM                  : 
+SUM                  : 48
 THIS                 : 
 TRUE                 : 
-VIRGU                : 6
+VIRGU                : 6 11 37
 VOID                 : 1
-WHILE                : 14
+WHILE                : 20
 error                : 
+length               : 
 
 Nonterminals, with rules where they appear
 
-CMD                  : 8
-CMDS                 : 1 2 9 12 13 14 17
-CMD_COND             : 9
-CONDICAO             : 13 14
-DC                   : 10
-EXPRESSAO            : 2 15 19 19 25
-FATOR                : 21 22
-MAIS_CMDS            : 8
-MAIS_FATORES         : 21 22
+ARGUMENTOS           : 34 37
+CMD                  : 14
+CMDS                 : 1 2 15 18 19 20 23
+CMD_COND             : 15
+CONDICAO             : 19 20
+DC                   : 16
+EXPRESSAO            : 2 21 27 27 28 28 29 29 30 30 31 31 32 32 33 39 45
+EXP_IDENT            : 25
+FATOR                : 42 50
+LISTA_ARG            : 26
+MAIS_CMDS            : 8 14
+MAIS_FATORES         : 42 50
+MAIS_IDENT           : 36
 MAIS_PARAMS          : 4
+MAIS_VAR             : 10
 METODO               : 1
-OP_UN                : 21
-OUTROS_TERMOS        : 20
+OP_AD                : 46
+OP_MUL               : 50
+OP_UN                : 42
+OUTROS_TERMOS        : 41 46
 PARAMS               : 2 6
-PFALSA               : 13
+PFALSA               : 19
 PROG                 : 0
-RELACAO              : 19
-RESTO_IDENT          : 16
-TERMO                : 20
-TIPO                 : 2 4
-empty                : 3 5 7 11 18
+RESTO_IDENT          : 22
+TERMO                : 41 46
+TIPO                 : 2 4 9
+VAR                  : 8
+VARS                 : 9 11
+empty                : 3 5 7 12 17 24 35 38 47 51
 

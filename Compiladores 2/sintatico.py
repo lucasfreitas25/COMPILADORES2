@@ -1,44 +1,18 @@
 import ply.yacc as yacc
+import ply.lex as lex
 from lexico import myLexer
 
 # Definição de tokens e palavras reservadas
-reservada = {
-    'int': 'INT',
-    'def': 'DEF',
-    'return': 'RETURN',
-    'while': 'WHILE',
-    'boolean': 'BOOLEAN',
-    'class': 'CLASS',
-    'extends': 'EXTENDS',
-    'public': 'PUBLIC',
-    'static': 'STATIC',
-    'void': 'VOID',
-    'main': 'MAIN',
-    'String': 'STRING',
-    'System.out.println': 'PRINT',
-    'if': 'IF',
-    'else': 'ELSE',
-    'length': 'LENGTH',
-    'true': 'TRUE',
-    'false': 'FALSE',
-    'this': 'THIS',
-    'new': 'NEW',
-    'null': 'NULL',
-    'double': 'DOUBLE'
-}
-
-tokens = [
-    'ID', 'COLON', 'LPAR', 'RPAR', 'MENOS', 'SUM', 'MUL', 'DIVI', 
-    'POINT', 'VIRGU', 'NUMBER', 'ASSIGMENT', 'LCBRA', 'RCBRA', 
-    'DIF', 'IGUAL', 'AND', 'MEN', 'MAI_IGUAL', 'MEN_IGUAL', 'MAI', 
-    'NEG', 'SEMICOLON', 'LSBRA', 'RSBRA'
-] + list(reservada.values())
+tokens = myLexer.tokens
 
 # Definição de precedência
 precedencia = (
     ('left', 'SUM', 'MENOS'),
     ('left', 'MUL', 'DIVI'),
 )
+lista_vars = []
+nova_lista = []
+metodos = {}
 
 # Definição da gramática
 def p_prog(p):
@@ -49,6 +23,8 @@ def p_metodo(p):
     """METODO : PUBLIC STATIC TIPO ID LPAR PARAMS RPAR LCBRA CMDS RETURN EXPRESSAO SEMICOLON RCBRA
               | empty"""
     if len(p) == 14:
+        global metodos
+        metodos[p[4]] = p[3]
         p[0] = ("METODO", p[3], p[4], p[6], p[9], p[10], p[12])
     else:
         p[0] = None
@@ -71,26 +47,23 @@ def p_mais_params(p):
         p[0] = None
 
 def p_dc(p):
-    """DC : VAR MAIS_DC
+    """DC : VAR MAIS_CMDS
           """
     if len(p) == 3:
         p[0] = (p[1], p[2])
     else:
         p[0] = None
 
-
-def p_mais_dc(p):
-    """MAIS_DC : SEMICOLON DC
-               | empty"""
-    if len(p) == 3:
-        p[0] = p[2]
-    else:
-        p[0] = None
-
-
 def p_var(p):
-    'VAR : TIPO VARS SEMICOLON'
+    'VAR : TIPO VARS'
     p[0] = (p[1], p[2])
+
+    lista_vars.append(p[2])
+
+    global nova_lista
+    nova_lista = [item for sublista in lista_vars for item in sublista]
+    nova_lista = [str(item) for item in nova_lista]
+    
 
 def p_vars(p):
     'VARS : ID MAIS_VAR'
@@ -102,11 +75,12 @@ def p_mais_var(p):
     if len(p) == 3:
         p[0] = p[2]
     else:
-        
         p[0] = []
+        
 def p_tipo(p):
     """TIPO : DOUBLE"""
-    p[0] = "DOUBLE"
+            
+    p[0] = "DOUBLE" 
 
 
 def p_cmds(p):
@@ -141,10 +115,16 @@ def p_cmd_cond(p):
 def p_cmd(p):
     """CMD : PRINT LPAR EXPRESSAO RPAR
            | ID RESTO_IDENT"""
+    var = p[1]
     if p[1] == 'System.out.println':
         p[0] = ("println", p[3])
+    elif p[1] in metodos:
+        p[0] = ("method_call", p[1], p[2])
+    elif var not in nova_lista:
+        print(f"Erro semântico: {var} não declarada")
     else:
         p[0] = ("assign_or_call", p[1], p[2])
+    
 
 def p_pfalsa(p):
     """PFALSA : ELSE LCBRA CMDS RCBRA 
@@ -155,10 +135,10 @@ def p_pfalsa(p):
         p[0] = None
 
 def p_resto_ident(p):
-    """RESTO_IDENT : IGUAL EXP_IDENT
+    """RESTO_IDENT : ASSIGMENT EXP_IDENT
                    | LPAR LISTA_ARG RPAR"""
     if p[1] == '=':
-        p[0] = ("assign", p[2])
+        p[0] = ("ASSIGMENT", p[2])
     else:
         p[0] = ("call", p[2])
 
@@ -194,6 +174,7 @@ def p_lista_arg(p):
         p[0] = p[1]
     else:
         p[0] = None
+        
 def p_argumentos(p):
     """ARGUMENTOS : ID MAIS_IDENT"""
     p[0] = ("ARGUMENTOS", p[1], p[2])
@@ -205,8 +186,11 @@ def p_mais_ident(p):
 
 def p_exp_ident(p):
     """EXP_IDENT : EXPRESSAO
-                 | TERMO"""
-    p[0] = p[1]
+                 | LERDOUBLE LPAR RPAR"""
+    if len(p) == 4:
+        p[0] = ("lerDouble",)
+    else:
+        p[0] = p[1]
 
 def p_expressao(p):
     "EXPRESSAO : TERMO OUTROS_TERMOS"
@@ -215,6 +199,7 @@ def p_expressao(p):
 def p_termo(p):
     """TERMO : OP_UN FATOR MAIS_FATORES"""
     p[0] = (p[1], p[2], p[3])
+    
 
 def p_op_un(p):
     """OP_UN : MENOS
@@ -223,7 +208,7 @@ def p_op_un(p):
 
 def p_fator(p):
     """FATOR : ID
-             | DOUBLE
+             | NUMBER
              | LPAR EXPRESSAO RPAR"""
     if len(p) == 2:
         p[0] = p[1]
@@ -235,6 +220,7 @@ def p_outros_termos(p):
                      | empty"""
     if len(p) == 4:
         p[0] = (p[1], p[2], p[3])
+        
     else:
         p[0] = None
 
@@ -242,10 +228,11 @@ def p_outros_termos(p):
 def p_op_ad(p):
     """OP_AD : SUM
              | MENOS"""
-    if p[2] == '+':
-        p[0] = p[1] + p[3]
-    elif p[2] == '-':
-        p[0] = p[1] - p[3]
+    if len(p) == 3:
+        if p[2] == '+':
+            p[0] = p[1] + p[3]
+        elif p[2] == '-':
+            p[0] = p[1] - p[3]
         
         
 def p_mais_fatores(p):
@@ -262,29 +249,52 @@ def p_op_mul(p):
     if p[2] == '*':
         p[0] = p[1] * p[3]
     elif p[2] == '/':
-        p[0] = p[1] / p[3]
+        if p[3] == 0:
+            print("Erro semântico: divisão por zero!")
+            p[0] = None
+        else:
+            p[0] = p[1] / p[3]
 
 def p_empty(p):
-    """empty :
-            """
+    '''empty :'''
     pass
 
 
 def p_error(p):
     if p:
-        print(f"Erro de sintaxe em '{p.value}' na linha {p.lineno}, tipo de token: {p.type}")
+        print(f"Erro de sintaxe em '{p.value}', token: {p.type} na linha {p.lineno}")
     else:
-        print("Erro de sintaxe no final do arquivo (EOF)")
+        print("Arquivo sem erros")
 
 
 
 parser = yacc.yacc()
 
+def token_generator(tokens):
+    for token in tokens:
+        yield token
+    yield None
+
 if __name__ == "__main__":
-    try:
+    # try:
         with open("tokens.txt", "r") as f:
-            data = f.read()            
-            parser.parse(data)
-            print("Análise concluída sem erros.")
-    except Exception as e:
-        print(f"Ocorreu um erro: {e}")
+            tokens = []
+            for line in f:
+                parts = line.split()
+                if len(parts) == 4:  
+                    tok_type, tok_value, lineno, lexpos = parts[0], parts[1], int(parts[2]), int(parts[3])
+
+                    
+                    token = lex.LexToken()
+                    token.type = tok_type
+                    token.value = tok_value
+                    token.lineno = lineno
+                    token.lexpos = lexpos
+                    tokens.append(token)
+
+            
+            parser.parse(tokenfunc=token_generator(tokens).__next__)
+            
+            
+    # except Exception as e:
+    #      print(f"Ocorreu um erro: {e}")
