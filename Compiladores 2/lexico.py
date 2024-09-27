@@ -3,13 +3,13 @@ import re
 
 class myLexer(object):
     reservada = {
-        'int' : 'INT',
-        'def':  'DEF',
+        # 'int' : 'INT',
+        # 'def':  'DEF',
         'return': 'RETURN',
         'while': 'WHILE',
-        'boolean': 'BOOLEAN',
+        # 'boolean': 'BOOLEAN',
         'class': 'CLASS',
-        'extends': 'EXTENDS',
+        # 'extends': 'EXTENDS',
         'public': 'PUBLIC',
         'static': 'STATIC',
         'void': 'VOID',
@@ -18,12 +18,12 @@ class myLexer(object):
         'System.out.println': 'PRINT',
         'if': 'IF',
         'else': 'ELSE',
-        'length': 'length',
-        'true': 'TRUE',
-        'false': 'FALSE',
-        'this': 'THIS',
-        'new': 'NEW',
-        'null': 'NULL',
+        # 'length': 'length',
+        # 'true': 'TRUE',
+        # 'false': 'FALSE',
+        # 'this': 'THIS',
+        # 'new': 'NEW',
+        # 'null': 'NULL',
         'double': 'DOUBLE',
         'lerDouble': 'LERDOUBLE'
 
@@ -31,14 +31,12 @@ class myLexer(object):
 
     tokens = [
         'ID',
-        'COLON', # :
         'LPAR', # (
         'RPAR', # )
         'MENOS', # -
         'SUM', # +
         'MUL', # *
         'DIVI', # /
-        'POINT', # .
         'VIRGU', # ,
         'NUMBER',
         'ASSIGMENT', # =
@@ -46,7 +44,6 @@ class myLexer(object):
         'RCBRA', # }
         'DIF', # !=
         'IGUAL', # ==
-        'AND', # &&
         'MEN', # <
         'MAI_IGUAL', # >=
         'MEN_IGUAL', # <=
@@ -57,21 +54,18 @@ class myLexer(object):
         'RSBRA' # ] 
     ] + list(reservada.values())
 
-    t_COLON = r'\:'
     t_LPAR = r'\('
     t_RPAR = r'\)'
     t_MENOS = r'\-'
     t_SUM = r'\+'
     t_MUL = r'\*'
     t_DIVI = r'/'
-    t_POINT = r'\.'
     t_VIRGU = r'\,'
     t_ASSIGMENT = r'\='
     t_LCBRA = r'\{'
     t_RCBRA = r'\}'
     t_DIF = r'\!\='
     t_IGUAL = r'\=\='
-    t_AND = r'\&\&'
     t_MEN = r'\<'
     t_MAI_IGUAL = r'>='
     t_MEN_IGUAL = r'<='
@@ -155,7 +149,6 @@ m.test(
                 }
                 System.out.println(c);
                 cont = cont - 1;
-                
             }
             return c;
         }
