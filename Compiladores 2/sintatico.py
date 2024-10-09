@@ -170,46 +170,30 @@ def p_cmd_cond(p):
     """CMD_COND : IF LPAR CONDICAO RPAR LCBRA CMDS RCBRA PFALSA
                 | WHILE LPAR CONDICAO RPAR LCBRA CMDS RCBRA
     """
+    
     if p[1] == 'if':
-        # Gerar código para a condição
-        condicao = p[3]  # Avaliar a condição
-        codegen.emit(condicao)  # Gerar o código que avalia a condição
-        posicao_falsa = codegen.retorno_posicao()  # Posição onde a execução irá pular se a condição for falsa
-        codegen.emit(f"DSVF FIM_IF_{posicao_falsa}")  # Se a condição for falsa, salta para o fim do if
+        
+        posicao_falsa = codegen.retorno_posicao()  
+        codegen.atualizar_comando(posicao_if, f"DSVF {posicao_falsa}")
 
-        # Gerar código para os comandos dentro do bloco 'if'
         p[0] = ("if", p[3], p[6], p[8])
-        codegen.emit(p[6])  # Gera os comandos do bloco 'if'
-
-        # Se houver um bloco 'else', tratar o desvio
+        # if p[7]:
+        #     print(codegen.retorno_posicao())
+      
         if p[8] is not None:
-            posicao_fim_else = codegen.retorno_posicao() + 1  # Posição após o bloco 'if'
-            codegen.emit(f"DSVS FIM_ELSE_{posicao_fim_else}")  # Pular o 'else' se o 'if' foi executado
-             # Label do fim do bloco 'if'
-
-            # Gerar o código para o bloco 'else'
-            codegen.emit(p[8])  # Emitir o código do bloco 'else'
-             # Label do fim do bloco 'else'
-
-            
-
+            posicao_fim_else = codegen.retorno_posicao() + 1 
+            # codegen.emit(f"DSVS FIM_ELSE_{posicao_fim_else}")  
     elif p[1] == 'while':
         # Gerar código para o while
         inicio_while = codegen.retorno_posicao()
-        
-
-        # Avaliar a condição do while
-        condicao = p[3]  # Avaliar a condição
-        codegen.emit(condicao)  # Gerar o código que avalia a condição
         posicao_fim_while = codegen.retorno_posicao() + 1
-        codegen.emit(f"DSVF FIM_WHILE_{posicao_fim_while}")  # Se a condição for falsa, sair do loop
+        codegen.emit(f"DSVI {inicio_while}")  
 
-        # Gerar o código para os comandos dentro do while
         p[0] = ("while", p[3], p[6])
-        codegen.emit(p[6])  # Gera os comandos do bloco 'while'
-
-        # Voltar para o início do while
-        codegen.emit(f"DSVS INICIO_WHILE_{inicio_while}")
+        # if p[7]:
+        #     print(codegen.retorno_posicao())
+     
+        codegen.atualizar_comando(posicao_if, f"DSVF {posicao_fim_while}")
     
 
       
@@ -260,22 +244,24 @@ def p_condicao(p):
     p[0] = (p[2], p[1], p[3]) 
     if p[2] == "<":
         codegen.emit(f"CPME")
-        codegen.incrementar_posicao()
     elif p[2] == ">":
         codegen.emit(f"CPMA")
-        codegen.incrementar_posicao()
     elif p[2] == "==":
         codegen.emit(f"CPIG")
-        codegen.incrementar_posicao()
     elif p[2] == "!=":
         codegen.emit(f"CPES")
-        codegen.incrementar_posicao()
     elif p[2] == ">=":
         codegen.emit(f"CPMI")
-        codegen.incrementar_posicao()
     elif p[2] == "<=":
         codegen.emit(f"CPAI")
-        codegen.incrementar_posicao()
+
+    codegen.incrementar_posicao()
+
+    global posicao_if
+    posicao_if = codegen.retorno_posicao() 
+    print(f"Posição do DSVF (inicial): {posicao_if}")
+    codegen.emit(f"DSVF ")
+
 
 def p_relacao(p):
     """RELACAO : IGUAL
@@ -350,7 +336,6 @@ def p_op_un(p):
              | empty"""
     p[0] = p[1] if len(p) > 1 else None
 
-comandos_emitidos = set()
 def p_fator(p):
     """FATOR : ID
              | NUMBER
@@ -359,19 +344,13 @@ def p_fator(p):
     if len(p) == 2:
         p[0] = p[1]
         if p.slice[1].type == 'ID':  
-            if (f"CRVL {p[1]}") not in comandos_emitidos:
-                comandos_emitidos.add((f"CRVL {p[1]}"))
-                codegen.incrementar_posicao()
-                codegen.emit(f"CRVL {p[1]}") 
+            codegen.incrementar_posicao()
+            codegen.emit(f"CRVL {p[1]}")
         elif p.slice[1].type == 'NUMBER':  
-            if (f"CRCT {p[1]}") not in comandos_emitidos:
-                codegen.incrementar_posicao()
-                comandos_emitidos.add(f"CRCT {p[1]}")
-                codegen.emit(f"CRCT {p[1]}")
+            codegen.incrementar_posicao()
+            codegen.emit(f"CRCT {p[1]}")
     else:
         p[0] = p[2]
-
-
 
 def p_outros_termos(p):
     """OUTROS_TERMOS : OP_AD TERMO OUTROS_TERMOS
@@ -457,6 +436,7 @@ class CodeGenerator:
         self.posicao = 0
         self.inM = -1
 
+
     def emit(self, instruction):
         
         self.instructions.append(instruction)
@@ -488,6 +468,9 @@ class CodeGenerator:
     
     def retorno_metodo(self):
         return self.inM
+    
+    def atualizar_comando(self, posicao, novo_comando):
+        self.instructions[posicao] = novo_comando
 
 codegen = CodeGenerator()
 
@@ -509,7 +492,5 @@ if __name__ == "__main__":
                     tokens.append(token)
 
             parser.parse(tokenfunc=token_generator(tokens).__next__)
-            # if erros == 0:
-            #     printar()
     # except Exception as e:
     #     print(f"Ocorreu um erro: {e}")
